@@ -1,6 +1,8 @@
 "use client";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import { Pencil, Trash2, Plus } from "lucide-react";
 
 type Category = {
   id: string;
@@ -38,11 +40,11 @@ const columns = [
 function RowActions(row: Category) {
   return (
     <div className="flex items-center gap-2">
-      <Button variant="secondary" size="sm">
-        ویرایش
+      <Button variant="ghost" size="icon" title="ویرایش">
+        <Pencil />
       </Button>
-      <Button variant="destructive" size="sm">
-        حذف
+      <Button variant="ghost" size="icon" title="حذف">
+        <Trash2 />
       </Button>
     </div>
   );
@@ -58,7 +60,11 @@ export default function CategoriesPage() {
         caption={
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-primary">دسته‌بندی‌ها</h2>
-            <Button>افزودن دسته‌بندی</Button>
+            <Button asChild title="افزودن دسته‌بندی">
+              <Link href="/categories/new">
+                <Plus />
+              </Link>
+            </Button>
           </div>
         }
       />

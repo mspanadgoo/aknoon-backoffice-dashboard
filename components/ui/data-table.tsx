@@ -54,12 +54,12 @@ export function DataTable<TData>({
   const cols = React.useMemo(() => {
     if (!rowActions) return columns;
     return [
-      ...columns,
       {
         id: "__actions__",
-        header: "عملیات",
+        header: "",
         cell: (row) => rowActions(row),
       } as ColumnDef<TData>,
+      ...columns,
     ];
   }, [columns, rowActions]);
 
@@ -81,29 +81,44 @@ export function DataTable<TData>({
         className,
       )}
     >
-      {caption && <div className="px-4 pt-4">{caption}</div>}
+      {caption && <div className="px-4 py-4 border-b border-border mb-2">{caption}</div>}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead className="bg-secondary text-secondary-foreground">
             <tr className="text-sm">
-              {cols.map((c, i) => (
-                <th key={c.id ?? i} className="px-4 py-3 text-start">
-                  {c.header}
-                </th>
-              ))}
+              {cols.map((c, i) => {
+                const isActions = c.id === "__actions__" || (i === 0 && !!rowActions);
+                return (
+                  <th
+                    key={c.id ?? i}
+                    className={cn(
+                      "px-4 py-3 text-left",
+                      isActions && "sticky left-0 z-10 bg-secondary"
+                    )}
+                  >
+                    {c.header}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
             {pageRows.map((row, ri) => (
               <tr key={ri} className="border-t border-border">
-                {cols.map((c, ci) => (
-                  <td
-                    key={(c.id ?? ci) as React.Key}
-                    className="px-4 py-3 align-middle"
-                  >
-                    {c.cell ? c.cell(row) : c.accessor ? c.accessor(row) : null}
-                  </td>
-                ))}
+                {cols.map((c, ci) => {
+                  const isActions = c.id === "__actions__" || (ci === 0 && !!rowActions);
+                  return (
+                    <td
+                      key={(c.id ?? ci) as React.Key}
+                      className={cn(
+                        "px-4 py-3 align-middle",
+                        isActions && "sticky left-0 bg-card"
+                      )}
+                    >
+                      {c.cell ? c.cell(row) : c.accessor ? c.accessor(row) : null}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
             {pageRows.length === 0 && (
