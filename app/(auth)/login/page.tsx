@@ -9,14 +9,6 @@ export default function LoginPage() {
     >
       <div className="w-full max-w-md">
         <Card className="shadow-xl border-none rounded-2xl overflow-hidden">
-          <div
-            className="h-40 w-full bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1542831371-d531d36971e6?q=80&w=1200')",
-            }}
-          />
-
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-amber-800">
               ورود به پنل مدیریت

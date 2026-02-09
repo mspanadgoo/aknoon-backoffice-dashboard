@@ -52,7 +52,10 @@ export function LoginForm() {
         </p>
       )}
 
-      <Button className="w-full" disabled={isPending}>
+      <Button
+        className="w-full bg-amber-600 hover:bg-amber-700"
+        disabled={isPending}
+      >
         {isPending ? "در حال ورود..." : "ورود"}
       </Button>
     </form>
