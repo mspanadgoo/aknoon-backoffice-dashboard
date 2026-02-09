@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { api } from "@/lib/axiosInstance";
 import { LoginInput } from "./auth.types";
 
 export async function loginApi(data: LoginInput) {
