@@ -1,12 +1,4 @@
-export interface LoginInput {
+export type LoginInput = {
   username: string;
   password: string;
-}
-
-export interface LoginResponse {
-  token: string;
-  user: {
-    id: string;
-    name: string;
-  };
-}
+};
