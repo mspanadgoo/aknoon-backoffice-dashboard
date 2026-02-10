@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, User } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useSidebarStore } from "./sidebar.store";
 
 export function Header() {
@@ -16,18 +16,8 @@ export function Header() {
         <button className="hidden md:block p-2" onClick={toggleCollapsed}>
           <Menu size={28} className="text-foreground" />
         </button>
-
-        <h1 className="text-lg font-semibold text-primary">خوش آمدید</h1>
       </div>
-
       <div />
-
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-muted-foreground hidden sm:block">
-          مدیر سیستم
-        </span>
-        <User size={24} className="text-foreground" />
-      </div>
     </header>
   );
 }

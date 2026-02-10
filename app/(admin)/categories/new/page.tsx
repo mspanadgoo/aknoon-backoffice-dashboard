@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BackButton } from "@/components/ui/back-button";
 import { CategoryForm } from "@/app/(admin)/categories/_components/CategoryForm";
 import { useCreateCategory } from "@/api/category/category.hooks";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ export default function CategoryNewPage() {
     });
   return (
     <div className="max-w-xl">
-      <BackButton />
       <Card>
         <CardHeader>
           <CardTitle className="text-primary">افزودن دسته‌بندی</CardTitle>

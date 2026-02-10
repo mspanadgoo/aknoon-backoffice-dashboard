@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BackButton } from "@/components/ui/back-button";
 import { ProductForm } from "@/app/(admin)/products/_components/ProductForm";
 import { useCreateProduct } from "@/api/product/product.hooks";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ export default function ProductNewPage() {
     });
   return (
     <div className="max-w-xl">
-      <BackButton />
       <Card>
         <CardHeader>
           <CardTitle className="text-primary">افزودن محصول</CardTitle>

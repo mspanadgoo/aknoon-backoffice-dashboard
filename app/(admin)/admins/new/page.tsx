@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BackButton } from "@/components/ui/back-button";
 import { AdminForm } from "@/app/(admin)/admins/_components/AdminForm";
 import { useCreateAdmin } from "@/api/admin/admin.hooks";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ export default function AdminNewPage() {
     });
   return (
     <div className="max-w-xl">
-      <BackButton />
       <Card>
         <CardHeader>
           <CardTitle className="text-primary">افزودن ادمین</CardTitle>

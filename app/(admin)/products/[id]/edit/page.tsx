@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BackButton } from "@/components/ui/back-button";
 import { ProductForm } from "@/app/(admin)/products/_components/ProductForm";
 import { useParams, useRouter } from "next/navigation";
 import { useProduct, useUpdateProduct } from "@/api/product/product.hooks";
@@ -17,7 +16,6 @@ export default function ProductEditPage() {
     });
   return (
     <div className="max-w-xl">
-      <BackButton />
       <Card>
         <CardHeader>
           <CardTitle className="text-primary">ویرایش محصول</CardTitle>
