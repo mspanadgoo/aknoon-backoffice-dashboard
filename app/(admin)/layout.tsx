@@ -3,6 +3,11 @@ import { Sidebar } from "./_components/Sidebar";
 import { Header } from "./_components/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { BackButton } from "@/components/ui/back-button";
+export const metadata = {
+  icons: {
+    icon: "/favicon.svg",
+  },
+};
 
 export default function AdminLayout({
   children,
