@@ -196,9 +196,8 @@ export function DataTable<TData>({
           </thead>
           <tbody>
             {pageRows.map((row, ri) => (
-              <>
+              <React.Fragment key={ri}>
                 <tr
-                  key={ri}
                   className={cn(
                     "border-t border-border odd:bg-accent/5 even:bg-card",
                     onRowClick && "cursor-pointer",
@@ -250,7 +249,7 @@ export function DataTable<TData>({
                     </td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             ))}
             {pageRows.length === 0 && (
               <tr>
