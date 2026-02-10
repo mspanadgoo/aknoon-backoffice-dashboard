@@ -3,52 +3,39 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Pencil, Trash2, Plus, Users } from "lucide-react";
-
-type Admin = {
-  id: string;
-  name: string;
-  username: string;
-  role: "admin" | "superadmin";
-  createdAt: string;
-};
-
-const data: Admin[] = [
-  {
-    id: "a1",
-    name: "مدیر ارشد",
-    username: "root",
-    role: "superadmin",
-    createdAt: "2025-12-01",
-  },
-  {
-    id: "a2",
-    name: "مدیر فروش",
-    username: "sales",
-    role: "admin",
-    createdAt: "2025-12-10",
-  },
-];
+import { useAdmins, useDeleteAdmin } from "@/api/admin/admin.hooks";
+import { Admin } from "@/api/admin/admin.types";
+import { useRouter } from "next/navigation";
 
 const columns = [
-  { header: "نام", accessor: (a: Admin) => a.name },
+  { header: "نام", accessor: (a: Admin) => `${a.firstName} ${a.lastName}` },
   { header: "نام کاربری", accessor: (a: Admin) => a.username },
   {
-    header: "نقش",
-    accessor: (a: Admin) => (a.role === "superadmin" ? "سوپرادمین" : "ادمین"),
-  },
-  {
     header: "ایجاد",
-    accessor: (a: Admin) => new Date(a.createdAt).toLocaleDateString("fa-IR"),
+    accessor: (a: Admin) =>
+      a.createdAt ? new Date(a.createdAt).toLocaleDateString("fa-IR") : "-",
   },
 ];
 
 function RowActions(row: Admin) {
+  const router = useRouter();
+  const { mutate } = useDeleteAdmin();
   return (
     <div className="flex justify-center gap-2">
-      <Button variant="ghost" size="icon" title="ویرایش">
+      <Button
+        variant="ghost"
+        size="icon"
+        title="ویرایش"
+        onClick={() => router.push(`/admins/${row.id}/edit`)}
+      >
         <Pencil />
       </Button>
-      <Button variant="ghost" size="icon" title="حذف">
+      <Button
+        variant="ghost"
+        size="icon"
+        title="حذف"
+        onClick={() => mutate(row.id)}
+      >
         <Trash2 />
       </Button>
     </div>
@@ -56,10 +43,13 @@ function RowActions(row: Admin) {
 }
 
 export default function AdminsPage() {
+  const { data, isLoading } = useAdmins();
+  const rows: Admin[] = data?.result ?? [];
+
   return (
     <div className="space-y-4">
       <DataTable
-        data={data}
+        data={isLoading ? [] : rows}
         columns={columns}
         rowActions={RowActions}
         caption={
