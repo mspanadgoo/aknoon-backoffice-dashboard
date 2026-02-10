@@ -21,12 +21,7 @@ export function Breadcrumb({ className }: { className?: string }) {
 
   const mapped = parts.map((part, idx) => {
     const href = "/" + parts.slice(0, idx + 1).join("/");
-    const isId =
-      /^[a-zA-Z0-9_-]+$/.test(part) &&
-      idx > 0 &&
-      parts[idx - 1] !== "new" &&
-      parts[idx - 1] !== "edit";
-    const label = labels[part] ?? (isId ? `#${part}` : part);
+    const label = labels[part] ?? null;
     return { href, label };
   });
 
@@ -44,23 +39,25 @@ export function Breadcrumb({ className }: { className?: string }) {
       className={cn("mb-4 px-1 text-sm overflow-x-auto", className)}
     >
       <ol className="flex items-center gap-2 text-muted-foreground">
-        {items.map((item, i) => {
-          const isLast = i === items.length - 1;
-          return (
-            <li key={item.href} className="flex items-center gap-2 shrink-0">
-              {isLast ? (
-                <span className="font-semibold text-foreground">
-                  {item.label}
-                </span>
-              ) : (
-                <Link href={item.href} className="hover:text-primary">
-                  {item.label}
-                </Link>
-              )}
-              {!isLast && <span aria-hidden>›</span>}
-            </li>
-          );
-        })}
+        {items
+          .filter((it) => it.label != null)
+          .map((item, i, arr) => {
+            const isLast = i === arr.length - 1;
+            return (
+              <li key={item.href} className="flex items-center gap-2 shrink-0">
+                {isLast ? (
+                  <span className="font-semibold text-foreground">
+                    {item.label as string}
+                  </span>
+                ) : (
+                  <Link href={item.href} className="hover:text-primary">
+                    {item.label as string}
+                  </Link>
+                )}
+                {!isLast && <span aria-hidden>›</span>}
+              </li>
+            );
+          })}
       </ol>
     </nav>
   );
