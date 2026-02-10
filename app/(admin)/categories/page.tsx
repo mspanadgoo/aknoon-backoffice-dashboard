@@ -3,47 +3,55 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Pencil, Trash2, Plus, Package } from "lucide-react";
-
-type Category = {
-  id: string;
-  title: string;
-  slug: string;
-  createdAt: string;
-};
-
-const data: Category[] = [
-  {
-    id: "1",
-    title: "نان و باگت",
-    slug: "bread-baguette",
-    createdAt: "2025-12-01",
-  },
-  { id: "2", title: "شیرینی خشک", slug: "cookies", createdAt: "2025-12-05" },
-  {
-    id: "3",
-    title: "کیک و تارت",
-    slug: "cakes-tarts",
-    createdAt: "2025-12-10",
-  },
-];
+import {
+  useCategories,
+  useDeleteCategory,
+} from "@/api/category/category.hooks";
+import { Category } from "@/api/category/category.types";
+import { useRouter } from "next/navigation";
 
 const columns = [
-  { header: "عنوان", accessor: (c: Category) => c.title },
-  { header: "اسلاگ", accessor: (c: Category) => c.slug },
+  { header: "عنوان", accessor: (c: Category) => c.name },
+  {
+    header: "فعال",
+    accessor: (c: Category) => (
+      <span
+        className={
+          c.active
+            ? "px-2 py-1 text-xs rounded bg-secondary text-secondary-foreground"
+            : "px-2 py-1 text-xs rounded bg-muted text-muted-foreground"
+        }
+      >
+        {c.active ? "فعال" : "غیرفعال"}
+      </span>
+    ),
+  },
   {
     header: "ایجاد",
     accessor: (c: Category) =>
-      new Date(c.createdAt).toLocaleDateString("fa-IR"),
+      c.createdAt ? new Date(c.createdAt).toLocaleDateString("fa-IR") : "-",
   },
 ];
 
-function RowActions(row: Category) {
+function RowActions({ row }: { row: Category }) {
+  const router = useRouter();
+  const { mutate } = useDeleteCategory();
   return (
     <div className="flex justify-center gap-2">
-      <Button variant="ghost" size="icon" title="ویرایش">
+      <Button
+        variant="ghost"
+        size="icon"
+        title="ویرایش"
+        onClick={() => router.push(`/categories/${row.id}/edit`)}
+      >
         <Pencil />
       </Button>
-      <Button variant="ghost" size="icon" title="حذف">
+      <Button
+        variant="ghost"
+        size="icon"
+        title="حذف"
+        onClick={() => mutate(row.id)}
+      >
         <Trash2 />
       </Button>
     </div>
@@ -51,12 +59,14 @@ function RowActions(row: Category) {
 }
 
 export default function CategoriesPage() {
+  const { data, isLoading } = useCategories();
+  const rows: Category[] = data?.result ?? [];
   return (
     <div className="space-y-4">
       <DataTable
-        data={data}
+        data={isLoading ? [] : rows}
         columns={columns}
-        rowActions={RowActions}
+        rowActions={(row) => <RowActions row={row} />}
         caption={
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-primary flex items-center gap-2">

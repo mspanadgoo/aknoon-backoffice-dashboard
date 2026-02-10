@@ -1,10 +1,18 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { BackButton } from "@/components/ui/back-button";
+import { CategoryForm } from "@/app/(admin)/categories/_components/CategoryForm";
+import { useCreateCategory } from "@/api/category/category.hooks";
+import { useRouter } from "next/navigation";
+import { CreateCategoryInput } from "@/api/category/category.types";
 
 export default function CategoryNewPage() {
+  const router = useRouter();
+  const { mutate, isPending } = useCreateCategory();
+  const handleSubmit = (values: CreateCategoryInput) =>
+    mutate(values, {
+      onSuccess: () => router.push("/categories"),
+    });
   return (
     <div className="max-w-xl">
       <BackButton />
@@ -12,16 +20,12 @@ export default function CategoryNewPage() {
         <CardHeader>
           <CardTitle className="text-primary">افزودن دسته‌بندی</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">عنوان</Label>
-            <Input id="title" placeholder="عنوان دسته‌بندی" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="slug">اسلاگ</Label>
-            <Input id="slug" placeholder="slug" />
-          </div>
-          <Button>ثبت</Button>
+        <CardContent>
+          <CategoryForm
+            mode="create"
+            submitting={isPending}
+            onSubmit={handleSubmit}
+          />
         </CardContent>
       </Card>
     </div>
