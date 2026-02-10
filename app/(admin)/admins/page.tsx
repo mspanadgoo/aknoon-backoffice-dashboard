@@ -17,7 +17,7 @@ const columns = [
   },
 ];
 
-function RowActions(row: Admin) {
+function RowActions({ row }: { row: Admin }) {
   const router = useRouter();
   const { mutate } = useDeleteAdmin();
   return (
@@ -51,7 +51,7 @@ export default function AdminsPage() {
       <DataTable
         data={isLoading ? [] : rows}
         columns={columns}
-        rowActions={RowActions}
+        rowActions={(row) => <RowActions row={row} />}
         caption={
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-primary flex items-center gap-2">
