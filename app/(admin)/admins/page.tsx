@@ -13,20 +13,38 @@ type Admin = {
 };
 
 const data: Admin[] = [
-  { id: "a1", name: "مدیر ارشد", username: "root", role: "superadmin", createdAt: "2025-12-01" },
-  { id: "a2", name: "مدیر فروش", username: "sales", role: "admin", createdAt: "2025-12-10" },
+  {
+    id: "a1",
+    name: "مدیر ارشد",
+    username: "root",
+    role: "superadmin",
+    createdAt: "2025-12-01",
+  },
+  {
+    id: "a2",
+    name: "مدیر فروش",
+    username: "sales",
+    role: "admin",
+    createdAt: "2025-12-10",
+  },
 ];
 
 const columns = [
   { header: "نام", accessor: (a: Admin) => a.name },
   { header: "نام کاربری", accessor: (a: Admin) => a.username },
-  { header: "نقش", accessor: (a: Admin) => (a.role === "superadmin" ? "سوپرادمین" : "ادمین") },
-  { header: "ایجاد", accessor: (a: Admin) => new Date(a.createdAt).toLocaleDateString("fa-IR") },
+  {
+    header: "نقش",
+    accessor: (a: Admin) => (a.role === "superadmin" ? "سوپرادمین" : "ادمین"),
+  },
+  {
+    header: "ایجاد",
+    accessor: (a: Admin) => new Date(a.createdAt).toLocaleDateString("fa-IR"),
+  },
 ];
 
 function RowActions(row: Admin) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex justify-center gap-2">
       <Button variant="ghost" size="icon" title="ویرایش">
         <Pencil />
       </Button>

@@ -56,7 +56,7 @@ export function DataTable<TData>({
     if (rowActions) {
       startCols.push({
         id: "__actions__",
-        header: "",
+        header: "عملیات",
         cell: (row) => rowActions(row),
       } as ColumnDef<TData>);
     }
@@ -74,6 +74,7 @@ export function DataTable<TData>({
   const pageRows = data.slice(startIndex, endIndex);
   const start = totalRows > 0 ? startIndex + 1 : 0;
   const end = totalRows > 0 ? endIndex : 0;
+  const fa = new Intl.NumberFormat("fa-IR");
 
   const [mobileCount, setMobileCount] = React.useState<number>(
     pageSizeOptions[0] ?? 10,
@@ -108,7 +109,7 @@ export function DataTable<TData>({
       )}
     >
       {caption && (
-        <div className="px-4 py-4 border-b border-border mb-2">{caption}</div>
+        <div className="px-4 py-4 border-b border-border">{caption}</div>
       )}
       <div className="md:hidden px-4 py-2 space-y-3">
         {mobileRows.map((row, ri) => (
@@ -122,7 +123,7 @@ export function DataTable<TData>({
                 )}
               </div>
               <span className="text-xs rounded bg-secondary text-secondary-foreground px-2 py-1">
-                {ri + 1}
+                {fa.format(ri + 1)}
               </span>
             </div>
             <div className="mt-3 space-y-2">
@@ -168,8 +169,8 @@ export function DataTable<TData>({
                     key={c.id ?? i}
                     className={cn(
                       "px-4 py-3 text-center",
-                      isStickyLeft && "sticky left-0 z-10 bg-secondary",
-                      isStickyRight && "sticky right-0 z-10 bg-secondary",
+                      isStickyLeft && "sticky left-0 z-10",
+                      isStickyRight && "sticky right-0 z-10",
                     )}
                   >
                     {c.header}
@@ -182,7 +183,7 @@ export function DataTable<TData>({
             {pageRows.map((row, ri) => (
               <tr
                 key={ri}
-                className="border-t border-border odd:bg-card even:bg-card/60"
+                className="border-t border-border odd:bg-accent/5 even:bg-card"
               >
                 {cols.map((c, ci) => {
                   const isStickyLeft = c.id === "__actions__";
@@ -192,12 +193,12 @@ export function DataTable<TData>({
                       key={(c.id ?? ci) as React.Key}
                       className={cn(
                         "px-4 py-3 align-middle text-center",
-                        isStickyLeft && "sticky left-0 bg-inherit",
-                        isStickyRight && "sticky right-0 bg-inherit",
+                        isStickyLeft && "sticky left-0",
+                        isStickyRight && "sticky right-0",
                       )}
                     >
                       {c.id === "__rownum__"
-                        ? startIndex + ri + 1
+                        ? fa.format(startIndex + ri + 1)
                         : c.cell
                           ? c.cell(row)
                           : c.accessor
@@ -238,14 +239,16 @@ export function DataTable<TData>({
           >
             {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
-                {size}
+                {fa.format(size)}
               </option>
             ))}
           </select>
         </div>
 
         <div className="text-sm text-muted-foreground">
-          {totalRows > 0 ? `${start}–${end} از ${totalRows}` : "0"}
+          {totalRows > 0
+            ? `${fa.format(start)}–${fa.format(end)} از ${fa.format(totalRows)}`
+            : "0"}
         </div>
 
         <div className="flex items-center gap-2">
