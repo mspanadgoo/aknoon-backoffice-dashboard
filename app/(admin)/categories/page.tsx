@@ -7,8 +7,9 @@ import {
   useCategories,
   useDeleteCategory,
 } from "@/api/category/category.hooks";
-import { Category } from "@/api/category/category.types";
+import { Category, ListCategoriesParams } from "@/api/category/category.types";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const columns = [
   { header: "عنوان", accessor: (c: Category) => c.name },
@@ -59,7 +60,8 @@ function RowActions({ row }: { row: Category }) {
 }
 
 export default function CategoriesPage() {
-  const { data, isLoading } = useCategories();
+  const [filters, setFilters] = useState<ListCategoriesParams>({});
+  const { data, isLoading } = useCategories(filters);
   const rows: Category[] = data?.result ?? [];
   return (
     <div className="space-y-4">
@@ -68,16 +70,64 @@ export default function CategoriesPage() {
         columns={columns}
         rowActions={(row) => <RowActions row={row} />}
         caption={
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
-              <Package />
-              دسته‌بندی‌ها
-            </h2>
-            <Button asChild title="افزودن دسته‌بندی">
-              <Link href="/categories/new">
-                <Plus />
-              </Link>
-            </Button>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+                <Package />
+                دسته‌بندی‌ها
+              </h2>
+              <Button asChild title="افزودن دسته‌بندی">
+                <Link href="/categories/new">
+                  <Plus />
+                </Link>
+              </Button>
+            </div>
+            <div className="rounded-lg border p-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="جستجوی عنوان"
+                  value={filters.name ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      name: e.target.value || undefined,
+                    }))
+                  }
+                />
+                <select
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  value={
+                    filters.active === undefined
+                      ? ""
+                      : filters.active
+                        ? "true"
+                        : "false"
+                  }
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setFilters((f) => ({
+                      ...f,
+                      active:
+                        v === "" ? undefined : v === "true" ? true : false,
+                    }));
+                  }}
+                >
+                  <option value="">وضعیت فعال (همه)</option>
+                  <option value="true">فعال</option>
+                  <option value="false">غیرفعال</option>
+                </select>
+                <div className="md:col-span-3 lg:col-span-5 flex items-center gap-2 justify-end">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFilters({})}
+                  >
+                    پاک کردن
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         }
       />

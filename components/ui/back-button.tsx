@@ -20,7 +20,6 @@ export function BackButton({
         aria-label={label}
       >
         <ChevronRight className="size-5" />
-        <span className="hidden md:inline">{label}</span>
       </Button>
     </div>
   );

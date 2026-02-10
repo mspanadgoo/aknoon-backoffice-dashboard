@@ -1,5 +1,6 @@
 "use client";
 import { DataTable } from "@/components/ui/data-table";
+import Image from "next/image";
 import { ShoppingBag, Eye } from "lucide-react";
 import { useOrders, useUpdateOrderStatus } from "@/api/order/order.hooks";
 import { Order, OrderStatus } from "@/api/order/order.types";
@@ -40,10 +41,19 @@ const columns = [
 ];
 
 export default function OrdersPage() {
-  const { data, isLoading } = useOrders();
+  const [filters, setFilters] = useState<{
+    telegramUsername?: string;
+    telegramUserId?: number;
+    minTotalPrice?: number;
+    maxTotalPrice?: number;
+    status?: OrderStatus;
+    productName?: string;
+  }>({});
+  const { data, isLoading } = useOrders(filters);
   const rows: Order[] = data?.result ?? [];
   const [selected, setSelected] = useState<Order | null>(null);
   const [open, setOpen] = useState(false);
+  const [openReceipt, setOpenReceipt] = useState(false);
   const { mutate, isPending } = useUpdateOrderStatus(selected?.id ?? "");
   const statuses: OrderStatus[] = [
     "PENDING_PAYMENT",
@@ -57,10 +67,116 @@ export default function OrdersPage() {
       <DataTable
         data={isLoading ? [] : rows}
         columns={columns}
+        caption={
+          <div className="space-y-3">
+            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+              <ShoppingBag />
+              سفارش‌ها
+            </h2>
+            <div className="rounded-lg border p-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="نام کاربری تلگرام"
+                  value={filters.telegramUsername ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      telegramUsername: e.target.value || undefined,
+                    }))
+                  }
+                />
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="شناسه تلگرام"
+                  type="number"
+                  value={filters.telegramUserId ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      telegramUserId:
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                    }))
+                  }
+                />
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="نام محصول"
+                  value={filters.productName ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      productName: e.target.value || undefined,
+                    }))
+                  }
+                />
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="حداقل مبلغ"
+                  type="number"
+                  value={filters.minTotalPrice ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      minTotalPrice:
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                    }))
+                  }
+                />
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="حداکثر مبلغ"
+                  type="number"
+                  value={filters.maxTotalPrice ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      maxTotalPrice:
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                    }))
+                  }
+                />
+                <select
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  value={filters.status ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setFilters((f) => ({
+                      ...f,
+                      status: v ? (v as OrderStatus) : undefined,
+                    }));
+                  }}
+                >
+                  <option value="">وضعیت (همه)</option>
+                  {statuses.map((s) => (
+                    <option key={s} value={s}>
+                      {STATUS_LABELS[s]}
+                    </option>
+                  ))}
+                </select>
+                <div className="md:col-span-3 lg:col-span-5 flex items-center gap-2 justify-end">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFilters({})}
+                  >
+                    پاک کردن
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
         rowActions={(row) => (
           <Button
-            variant="outline"
-            size="sm"
+            variant="ghost"
+            size="icon"
             title="مشاهده جزئیات"
             onClick={() => {
               setSelected(row as Order);
@@ -70,12 +186,6 @@ export default function OrdersPage() {
             <Eye size={16} />
           </Button>
         )}
-        caption={
-          <h2 className="text-xl font-bold text-primary flex items-center gap-2">
-            <ShoppingBag />
-            سفارش‌ها
-          </h2>
-        }
       />
       {open && selected && (
         <div className="fixed inset-0 z-50">
@@ -108,13 +218,21 @@ export default function OrdersPage() {
                       </span>
                     </div>
                   </div>
-                  {selected.paymentImageUrl && (
-                    <div className="text-center">
-                      <img
-                        src={selected.paymentImageUrl}
-                        alt="رسید پرداخت"
-                        className="inline-block max-h-40 rounded border"
-                      />
+                  {selected.paymentImageUrl ? (
+                    <div className="text-center space-y-2">
+                      <div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setOpenReceipt(true)}
+                        >
+                          مشاهده رسید
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center text-sm text-muted-foreground">
+                      رسید پرداخت موجود نیست
                     </div>
                   )}
                 </div>
@@ -174,6 +292,39 @@ export default function OrdersPage() {
                       </Button>
                     ))}
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {openReceipt && selected?.paymentImageUrl && (
+        <div className="fixed inset-0 z-50">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setOpenReceipt(false)}
+          />
+          <div className="absolute inset-0 flex items-center justify-center p-4">
+            <div className="w-full max-w-4xl rounded-lg border bg-background shadow-2xl overflow-hidden">
+              <div className="px-4 py-3 border-b flex items-center justify-between">
+                <h3 className="text-lg font-semibold">رسید پرداخت</h3>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setOpenReceipt(false)}
+                >
+                  بستن
+                </Button>
+              </div>
+              <div className="p-4">
+                <div className="relative w-full h-[75vh]">
+                  <Image
+                    src={selected.paymentImageUrl}
+                    alt="رسید پرداخت"
+                    fill
+                    unoptimized
+                    className="object-contain rounded"
+                  />
                 </div>
               </div>
             </div>

@@ -5,7 +5,6 @@ import { useThemeStore } from "./theme.store";
 import Link from "next/link";
 import {
   Home,
-  ShoppingCart,
   Package,
   FolderTree,
   Moon,

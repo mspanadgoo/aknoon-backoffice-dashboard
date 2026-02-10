@@ -15,7 +15,13 @@ const labels: Record<string, string> = {
   login: "ورود",
 };
 
-export function Breadcrumb({ className }: { className?: string }) {
+export function Breadcrumb({
+  className,
+  includeCurrent = false,
+}: {
+  className?: string;
+  includeCurrent?: boolean;
+}) {
   const pathname = usePathname();
   const parts = pathname.split("/").filter(Boolean);
 
@@ -39,13 +45,17 @@ export function Breadcrumb({ className }: { className?: string }) {
       className={cn("mb-4 px-1 text-sm overflow-x-auto", className)}
     >
       <ol className="flex items-center gap-2 text-muted-foreground">
-        {items
-          .filter((it) => it.label != null)
-          .map((item, i, arr) => {
+        {(() => {
+          const trail = items.filter((it) => it.label != null);
+          if (!includeCurrent && trail.length > 0) {
+            trail.pop();
+          }
+          return trail.map((item, i, arr) => {
             const isLast = i === arr.length - 1;
+            const isCurrent = includeCurrent && isLast;
             return (
               <li key={item.href} className="flex items-center gap-2 shrink-0">
-                {isLast ? (
+                {isCurrent ? (
                   <span className="font-semibold text-foreground">
                     {item.label as string}
                   </span>
@@ -57,7 +67,8 @@ export function Breadcrumb({ className }: { className?: string }) {
                 {!isLast && <span aria-hidden>›</span>}
               </li>
             );
-          })}
+          });
+        })()}
       </ol>
     </nav>
   );
