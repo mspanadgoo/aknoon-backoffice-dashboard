@@ -7,8 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoginInput } from "@/api/auth/auth.types";
 import { useLogin } from "@/api/auth/auth.hooks";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/toast";
 
 export function LoginForm() {
+  const router = useRouter();
+  const toast = useToast();
   const {
     register,
     handleSubmit,
@@ -17,7 +21,16 @@ export function LoginForm() {
 
   const { mutate, isPending, error } = useLogin();
 
-  const onSubmit = (data: LoginInput) => mutate(data);
+  const onSubmit = (data: LoginInput) =>
+    mutate(data, {
+      onSuccess: () => {
+        toast.success("ورود موفق");
+        router.replace("/dashboard");
+      },
+      onError: () => {
+        toast.error("خطا در ورود");
+      },
+    });
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
