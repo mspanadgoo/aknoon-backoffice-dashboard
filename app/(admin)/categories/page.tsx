@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Package } from "lucide-react";
 
 type Category = {
   id: string;
@@ -59,7 +59,10 @@ export default function CategoriesPage() {
         rowActions={RowActions}
         caption={
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-primary">دسته‌بندی‌ها</h2>
+            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+              <Package />
+              دسته‌بندی‌ها
+            </h2>
             <Button asChild title="افزودن دسته‌بندی">
               <Link href="/categories/new">
                 <Plus />

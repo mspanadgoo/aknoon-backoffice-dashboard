@@ -5,13 +5,14 @@ import { useThemeStore } from "./theme.store";
 import Link from "next/link";
 import {
   Home,
-  Boxes,
   ShoppingCart,
   Package,
   FolderTree,
   Moon,
   Sun,
   LogOut,
+  Users,
+  ShoppingBag,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import pkg from "../../../package.json";
@@ -23,14 +24,15 @@ export function Sidebar() {
 
   const menu = [
     { title: "داشبورد", href: "/dashboard", icon: <Home size={20} /> },
+    { title: "ادمین‌ها", href: "/admins", icon: <Users size={20} /> },
     {
       title: "دسته‌بندی‌ها",
       href: "/categories",
       icon: <FolderTree size={20} />,
     },
     { title: "محصولات", href: "/products", icon: <Package size={20} /> },
-    { title: "سفارش‌ها", href: "/orders", icon: <ShoppingCart size={20} /> },
-    { title: "سبدها", href: "/baskets", icon: <Boxes size={20} /> },
+    { title: "سفارش‌ها", href: "/orders", icon: <ShoppingBag size={20} /> },
+    { title: "سبدها", href: "/baskets", icon: <ShoppingCart size={20} /> },
   ];
 
   return (

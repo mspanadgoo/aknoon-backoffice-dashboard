@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Package } from "lucide-react";
 
 type Product = {
   id: string;
@@ -76,7 +76,10 @@ export default function ProductsPage() {
         rowActions={RowActions}
         caption={
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-primary">محصولات</h2>
+            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+              <Package />
+              محصولات
+            </h2>
             <Button asChild title="افزودن محصول">
               <Link href="/products/new">
                 <Plus />

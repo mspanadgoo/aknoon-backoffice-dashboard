@@ -1,5 +1,6 @@
 "use client";
 import { DataTable } from "@/components/ui/data-table";
+import { ShoppingCart } from "lucide-react";
 
 type Basket = {
   id: string;
@@ -53,7 +54,12 @@ export default function BasketsPage() {
       <DataTable
         data={data}
         columns={columns}
-        caption={<h2 className="text-xl font-bold text-primary">سبدها</h2>}
+        caption={
+          <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+            <ShoppingCart />
+            سبدها
+          </h2>
+        }
       />
     </div>
   );
