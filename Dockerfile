@@ -15,6 +15,7 @@ COPY . .
 RUN pnpm build
 
 FROM base AS runner
+RUN corepack enable
 RUN adduser -D appuser
 USER appuser
 COPY --from=builder /app/package.json ./package.json
