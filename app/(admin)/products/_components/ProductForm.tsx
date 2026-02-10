@@ -105,7 +105,7 @@ function CategorySelect({
       <Label htmlFor="categoryId">دسته‌بندی</Label>
       <select
         id="categoryId"
-        className="w-full h-9 px-3 py-2 rounded-md border bg-background"
+        className="w-full h-9 px-3 py-2 rounded-md border bg-background text-xs"
         defaultValue={selected ?? ""}
         {...registerCategory}
       >
