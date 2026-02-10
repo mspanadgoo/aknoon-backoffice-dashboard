@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
@@ -17,9 +17,10 @@ export function BackButton({
       <Button
         onClick={() => router.back()}
         className="gap-2 rounded-full px-4 py-2 bg-secondary text-secondary-foreground hover:bg-accent/10"
+        aria-label={label}
       >
         <ChevronRight className="size-5" />
-        <span>{label}</span>
+        <span className="hidden md:inline">{label}</span>
       </Button>
     </div>
   );
