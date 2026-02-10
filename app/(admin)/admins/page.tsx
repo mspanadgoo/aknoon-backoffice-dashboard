@@ -50,6 +50,16 @@ export default function AdminsPage() {
 
   return (
     <div className="space-y-4">
+      {isLoading && (
+        <div className="rounded-xl border bg-card p-4">
+          <div className="h-6 w-36 bg-muted rounded mb-3 animate-pulse" />
+          <div className="space-y-2">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-10 bg-muted rounded animate-pulse" />
+            ))}
+          </div>
+        </div>
+      )}
       <DataTable
         data={isLoading ? [] : rows}
         columns={columns}
