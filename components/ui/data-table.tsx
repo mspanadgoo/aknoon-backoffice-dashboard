@@ -52,15 +52,16 @@ export function DataTable<TData>({
   };
 
   const cols = React.useMemo(() => {
-    if (!rowActions) return columns;
-    return [
-      {
+    const startCols: ColumnDef<TData>[] = [];
+    if (rowActions) {
+      startCols.push({
         id: "__actions__",
         header: "",
         cell: (row) => rowActions(row),
-      } as ColumnDef<TData>,
-      ...columns,
-    ];
+      } as ColumnDef<TData>);
+    }
+    const endCols: ColumnDef<TData>[] = [{ id: "__rownum__", header: "ردیف" }];
+    return [...startCols, ...columns, ...endCols];
   }, [columns, rowActions]);
 
   const totalRows = data.length;
@@ -81,19 +82,23 @@ export function DataTable<TData>({
         className,
       )}
     >
-      {caption && <div className="px-4 py-4 border-b border-border mb-2">{caption}</div>}
-      <div className="overflow-x-auto">
+      {caption && (
+        <div className="px-4 py-4 border-b border-border mb-2">{caption}</div>
+      )}
+      <div className="overflow-x-auto" dir="ltr">
         <table className="w-full border-collapse">
           <thead className="bg-secondary text-secondary-foreground">
             <tr className="text-sm">
               {cols.map((c, i) => {
-                const isActions = c.id === "__actions__" || (i === 0 && !!rowActions);
+                const isStickyLeft = c.id === "__actions__";
+                const isStickyRight = c.id === "__rownum__";
                 return (
                   <th
                     key={c.id ?? i}
                     className={cn(
-                      "px-4 py-3 text-left",
-                      isActions && "sticky left-0 z-10 bg-secondary"
+                      "px-4 py-3 text-center",
+                      isStickyLeft && "sticky left-0 z-10 bg-secondary",
+                      isStickyRight && "sticky right-0 z-10 bg-secondary",
                     )}
                   >
                     {c.header}
@@ -106,16 +111,24 @@ export function DataTable<TData>({
             {pageRows.map((row, ri) => (
               <tr key={ri} className="border-t border-border">
                 {cols.map((c, ci) => {
-                  const isActions = c.id === "__actions__" || (ci === 0 && !!rowActions);
+                  const isStickyLeft = c.id === "__actions__";
+                  const isStickyRight = c.id === "__rownum__";
                   return (
                     <td
                       key={(c.id ?? ci) as React.Key}
                       className={cn(
-                        "px-4 py-3 align-middle",
-                        isActions && "sticky left-0 bg-card"
+                        "px-4 py-3 align-middle text-center",
+                        isStickyLeft && "sticky left-0 bg-card",
+                        isStickyRight && "sticky right-0 bg-card",
                       )}
                     >
-                      {c.cell ? c.cell(row) : c.accessor ? c.accessor(row) : null}
+                      {c.id === "__rownum__"
+                        ? startIndex + ri + 1
+                        : c.cell
+                          ? c.cell(row)
+                          : c.accessor
+                            ? c.accessor(row)
+                            : null}
                     </td>
                   );
                 })}

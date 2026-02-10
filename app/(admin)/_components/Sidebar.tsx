@@ -84,7 +84,12 @@ export function Sidebar() {
 
               <button
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-destructive/20 transition-colors"
-                onClick={() => router.push("/login")}
+                onClick={async () => {
+                  try {
+                    await fetch("/api/auth/logout", { method: "POST" });
+                  } catch {}
+                  router.push("/login");
+                }}
                 aria-label="exit"
                 title="خروج"
               >
