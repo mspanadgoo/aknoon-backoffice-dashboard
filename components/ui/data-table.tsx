@@ -180,7 +180,10 @@ export function DataTable<TData>({
           </thead>
           <tbody>
             {pageRows.map((row, ri) => (
-              <tr key={ri} className="border-t border-border">
+              <tr
+                key={ri}
+                className="border-t border-border odd:bg-card even:bg-card/60"
+              >
                 {cols.map((c, ci) => {
                   const isStickyLeft = c.id === "__actions__";
                   const isStickyRight = c.id === "__rownum__";
@@ -189,8 +192,8 @@ export function DataTable<TData>({
                       key={(c.id ?? ci) as React.Key}
                       className={cn(
                         "px-4 py-3 align-middle text-center",
-                        isStickyLeft && "sticky left-0 bg-card",
-                        isStickyRight && "sticky right-0 bg-card",
+                        isStickyLeft && "sticky left-0 bg-inherit",
+                        isStickyRight && "sticky right-0 bg-inherit",
                       )}
                     >
                       {c.id === "__rownum__"

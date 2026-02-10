@@ -99,9 +99,7 @@ export function Sidebar() {
                 {!collapsed && <span>خروج</span>}
               </button>
             </div>
-            <div
-              className={`mt-3 text-xs text-muted-foreground ${collapsed ? "text-center" : "text-right"}`}
-            >
+            <div className={`mt-3 text-xs text-muted-foreground text-center`}>
               {!collapsed ? (
                 <span>نسخه: v{pkg.version}</span>
               ) : (
