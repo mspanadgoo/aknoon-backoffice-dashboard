@@ -20,7 +20,7 @@ export async function GET(_: Request, context: unknown) {
     typeof (p as Promise<{ id: string }>).then === "function"
       ? (await (p as Promise<{ id: string }>)).id
       : (p as { id: string }).id;
-  const res = await fetch(`${base}/api/v1/categories/${id}`, {
+  const res = await fetch(`${base}/api/v1/category/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json().catch(() => null);
@@ -55,7 +55,7 @@ export async function PATCH(req: Request, context: unknown) {
     typeof (p as Promise<{ id: string }>).then === "function"
       ? (await (p as Promise<{ id: string }>)).id
       : (p as { id: string }).id;
-  const res = await fetch(`${base}/api/v1/categories/${id}`, {
+  const res = await fetch(`${base}/api/v1/category/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export async function DELETE(_: Request, context: unknown) {
     typeof (p as Promise<{ id: string }>).then === "function"
       ? (await (p as Promise<{ id: string }>)).id
       : (p as { id: string }).id;
-  const res = await fetch(`${base}/api/v1/categories/${id}`, {
+  const res = await fetch(`${base}/api/v1/category/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });

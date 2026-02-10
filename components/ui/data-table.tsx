@@ -23,6 +23,8 @@ type DataTableProps<TData> = {
   pageSizeOptions?: number[];
   rowActions?: (row: TData) => React.ReactNode;
   caption?: React.ReactNode;
+  renderExpanded?: (row: TData) => React.ReactNode;
+  onRowClick?: (row: TData) => void;
 };
 
 export function DataTable<TData>({
@@ -34,6 +36,8 @@ export function DataTable<TData>({
   pageSizeOptions = [10, 20, 50],
   rowActions,
   caption,
+  renderExpanded,
+  onRowClick,
 }: DataTableProps<TData>) {
   const [internalPagination, setInternalPagination] =
     React.useState<PaginationState>({
@@ -61,7 +65,7 @@ export function DataTable<TData>({
       } as ColumnDef<TData>);
     }
     const endCols: ColumnDef<TData>[] = [{ id: "__rownum__", header: "ردیف" }];
-    return [...startCols, ...columns, ...endCols];
+    return [...endCols, ...columns, ...startCols];
   }, [columns, rowActions]);
 
   const totalRows = data.length;
@@ -81,6 +85,17 @@ export function DataTable<TData>({
   );
   const mobileSentinelRef = React.useRef<HTMLDivElement | null>(null);
   const [mobileLoading, setMobileLoading] = React.useState(false);
+  const [expandedRows, setExpandedRows] = React.useState<Set<number>>(
+    () => new Set(),
+  );
+  const toggleRowExpanded = (index: number) => {
+    setExpandedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
 
   React.useEffect(() => {
     const el = mobileSentinelRef.current;
@@ -157,7 +172,7 @@ export function DataTable<TData>({
           </div>
         )}
       </div>
-      <div className="overflow-x-auto hidden md:block" dir="ltr">
+      <div className="overflow-x-auto hidden md:block" dir="rtl">
         <table className="w-full border-collapse">
           <thead className="bg-secondary text-secondary-foreground">
             <tr className="text-sm">
@@ -168,7 +183,7 @@ export function DataTable<TData>({
                   <th
                     key={c.id ?? i}
                     className={cn(
-                      "px-4 py-3 text-center",
+                      "px-4 py-3 text-center overflow-visible",
                       isStickyLeft && "sticky left-0 z-10",
                       isStickyRight && "sticky right-0 z-10",
                     )}
@@ -181,33 +196,61 @@ export function DataTable<TData>({
           </thead>
           <tbody>
             {pageRows.map((row, ri) => (
-              <tr
-                key={ri}
-                className="border-t border-border odd:bg-accent/5 even:bg-card"
-              >
-                {cols.map((c, ci) => {
-                  const isStickyLeft = c.id === "__actions__";
-                  const isStickyRight = c.id === "__rownum__";
-                  return (
-                    <td
-                      key={(c.id ?? ci) as React.Key}
-                      className={cn(
-                        "px-4 py-3 align-middle text-center",
-                        isStickyLeft && "sticky left-0",
-                        isStickyRight && "sticky right-0",
-                      )}
-                    >
-                      {c.id === "__rownum__"
-                        ? fa.format(startIndex + ri + 1)
-                        : c.cell
-                          ? c.cell(row)
-                          : c.accessor
-                            ? c.accessor(row)
-                            : null}
+              <>
+                <tr
+                  key={ri}
+                  className={cn(
+                    "border-t border-border odd:bg-accent/5 even:bg-card",
+                    onRowClick && "cursor-pointer",
+                  )}
+                  onClick={() => onRowClick?.(row)}
+                >
+                  {cols.map((c, ci) => {
+                    const isStickyLeft = c.id === "__actions__";
+                    const isStickyRight = c.id === "__rownum__";
+                    return (
+                      <td
+                        key={(c.id ?? ci) as React.Key}
+                        className={cn(
+                          "px-4 py-3 align-middle text-center overflow-visible",
+                          isStickyLeft && "sticky left-0",
+                          isStickyRight && "sticky right-0",
+                        )}
+                      >
+                        {c.id === "__rownum__" ? (
+                          fa.format(startIndex + ri + 1)
+                        ) : c.id === "__actions__" ? (
+                          <div className="flex items-center gap-2 justify-center">
+                            {renderExpanded && (
+                              <button
+                                className="px-2 py-1 rounded-md bg-muted hover:bg-accent text-sm"
+                                title={
+                                  expandedRows.has(ri) ? "بستن" : "باز کردن"
+                                }
+                                onClick={() => toggleRowExpanded(ri)}
+                              >
+                                {expandedRows.has(ri) ? "−" : "+"}
+                              </button>
+                            )}
+                            {rowActions ? rowActions(row) : null}
+                          </div>
+                        ) : c.cell ? (
+                          c.cell(row)
+                        ) : c.accessor ? (
+                          c.accessor(row)
+                        ) : null}
+                      </td>
+                    );
+                  })}
+                </tr>
+                {renderExpanded && expandedRows.has(ri) && (
+                  <tr className="bg-card">
+                    <td className="px-4 py-3 text-right" colSpan={cols.length}>
+                      {renderExpanded(row)}
                     </td>
-                  );
-                })}
-              </tr>
+                  </tr>
+                )}
+              </>
             ))}
             {pageRows.length === 0 && (
               <tr>

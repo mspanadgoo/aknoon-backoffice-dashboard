@@ -30,7 +30,7 @@ export async function GET(req: Request) {
   if (page) qs.set("page", page);
   if (pageSize) qs.set("pageSize", pageSize);
 
-  const res = await fetch(`${base}/api/v1/categories?${qs.toString()}`, {
+  const res = await fetch(`${base}/api/v1/category?${qs.toString()}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json().catch(() => null);
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
   if (!body) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
-  const res = await fetch(`${base}/api/v1/categories`, {
+  const res = await fetch(`${base}/api/v1/category`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -32,7 +32,6 @@ export function Sidebar() {
     },
     { title: "محصولات", href: "/products", icon: <Package size={20} /> },
     { title: "سفارش‌ها", href: "/orders", icon: <ShoppingBag size={20} /> },
-    { title: "سبدها", href: "/baskets", icon: <ShoppingCart size={20} /> },
   ];
 
   return (
