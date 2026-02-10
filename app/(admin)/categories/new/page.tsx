@@ -2,10 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BackButton } from "@/components/ui/back-button";
 
 export default function CategoryNewPage() {
   return (
     <div className="max-w-xl">
+      <BackButton />
       <Card>
         <CardHeader>
           <CardTitle className="text-primary">افزودن دسته‌بندی</CardTitle>

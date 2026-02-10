@@ -75,6 +75,31 @@ export function DataTable<TData>({
   const start = totalRows > 0 ? startIndex + 1 : 0;
   const end = totalRows > 0 ? endIndex : 0;
 
+  const [mobileCount, setMobileCount] = React.useState<number>(
+    pageSizeOptions[0] ?? 10,
+  );
+  const mobileSentinelRef = React.useRef<HTMLDivElement | null>(null);
+  const [mobileLoading, setMobileLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = mobileSentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry.isIntersecting) {
+        setMobileLoading(true);
+        setMobileCount((prev) =>
+          Math.min(prev + (pageSizeOptions[0] ?? 10), totalRows),
+        );
+        setMobileLoading(false);
+      }
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [totalRows, pageSizeOptions]);
+
+  const mobileRows = data.slice(0, mobileCount);
+
   return (
     <div
       className={cn(
@@ -85,7 +110,53 @@ export function DataTable<TData>({
       {caption && (
         <div className="px-4 py-4 border-b border-border mb-2">{caption}</div>
       )}
-      <div className="overflow-x-auto" dir="ltr">
+      <div className="md:hidden px-4 py-2 space-y-3">
+        {mobileRows.map((row, ri) => (
+          <div key={ri} className="rounded-lg border bg-card p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {rowActions && (
+                  <div className="flex items-center gap-2">
+                    {rowActions(row)}
+                  </div>
+                )}
+              </div>
+              <span className="text-xs rounded bg-secondary text-secondary-foreground px-2 py-1">
+                {ri + 1}
+              </span>
+            </div>
+            <div className="mt-3 space-y-2">
+              {columns.map((c, ci) => (
+                <div
+                  key={c.id ?? ci}
+                  className="flex items-start justify-between gap-3"
+                >
+                  <div className="text-sm text-muted-foreground">
+                    {c.header}
+                  </div>
+                  <div className="text-sm">
+                    {c.cell ? c.cell(row) : c.accessor ? c.accessor(row) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        {mobileRows.length === 0 && (
+          <div className="rounded-lg border bg-card p-6 text-center text-muted-foreground">
+            داده‌ای یافت نشد
+          </div>
+        )}
+        {mobileRows.length < totalRows && (
+          <div
+            ref={mobileSentinelRef}
+            className="h-8 flex items-center justify-center text-xs text-muted-foreground"
+          >
+            {mobileLoading ? "..." : "نمایش بیشتر"}
+          </div>
+        )}
+      </div>
+      <div className="overflow-x-auto hidden md:block" dir="ltr">
         <table className="w-full border-collapse">
           <thead className="bg-secondary text-secondary-foreground">
             <tr className="text-sm">
@@ -148,7 +219,7 @@ export function DataTable<TData>({
         </table>
       </div>
 
-      <div className="flex items-center justify-between gap-3 px-4 py-3 border-t border-border">
+      <div className="hidden md:flex items-center justify-between gap-3 px-4 py-3 border-t border-border">
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">تعداد در صفحه</span>
           <select
