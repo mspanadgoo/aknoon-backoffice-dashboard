@@ -1,10 +1,18 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { BackButton } from "@/components/ui/back-button";
+import { ProductForm } from "@/app/(admin)/products/_components/ProductForm";
+import { useCreateProduct } from "@/api/product/product.hooks";
+import { useRouter } from "next/navigation";
+import { CreateProductInput } from "@/api/product/product.types";
 
 export default function ProductNewPage() {
+  const router = useRouter();
+  const { mutate, isPending } = useCreateProduct();
+  const handleSubmit = (values: CreateProductInput) =>
+    mutate(values, {
+      onSuccess: () => router.push("/products"),
+    });
   return (
     <div className="max-w-xl">
       <BackButton />
@@ -12,20 +20,12 @@ export default function ProductNewPage() {
         <CardHeader>
           <CardTitle className="text-primary">افزودن محصول</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">عنوان</Label>
-            <Input id="title" placeholder="عنوان محصول" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="sku">کد</Label>
-            <Input id="sku" placeholder="SKU" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="price">قیمت</Label>
-            <Input id="price" type="number" placeholder="قیمت" />
-          </div>
-          <Button>ثبت</Button>
+        <CardContent>
+          <ProductForm
+            mode="create"
+            submitting={isPending}
+            onSubmit={handleSubmit}
+          />
         </CardContent>
       </Card>
     </div>

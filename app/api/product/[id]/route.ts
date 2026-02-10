@@ -20,12 +20,12 @@ export async function GET(_: Request, context: unknown) {
     typeof (p as Promise<{ id: string }>).then === "function"
       ? (await (p as Promise<{ id: string }>)).id
       : (p as { id: string }).id;
-  const res = await fetch(`${base}/api/v1/categories/${id}`, {
+  const res = await fetch(`${base}/api/v1/product/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    return NextResponse.json(data ?? { error: "Failed to fetch category" }, {
+    return NextResponse.json(data ?? { error: "Failed to fetch product" }, {
       status: res.status,
     });
   }
@@ -55,7 +55,7 @@ export async function PATCH(req: Request, context: unknown) {
     typeof (p as Promise<{ id: string }>).then === "function"
       ? (await (p as Promise<{ id: string }>)).id
       : (p as { id: string }).id;
-  const res = await fetch(`${base}/api/v1/categories/${id}`, {
+  const res = await fetch(`${base}/api/v1/product/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export async function PATCH(req: Request, context: unknown) {
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    return NextResponse.json(data ?? { error: "Failed to update category" }, {
+    return NextResponse.json(data ?? { error: "Failed to update product" }, {
       status: res.status,
     });
   }
@@ -91,13 +91,13 @@ export async function DELETE(_: Request, context: unknown) {
     typeof (p as Promise<{ id: string }>).then === "function"
       ? (await (p as Promise<{ id: string }>)).id
       : (p as { id: string }).id;
-  const res = await fetch(`${base}/api/v1/categories/${id}`, {
+  const res = await fetch(`${base}/api/v1/product/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
+  const data = await res.json().catch(() => null);
   if (!res.ok) {
-    const data = await res.json().catch(() => null);
-    return NextResponse.json(data ?? { error: "Failed to delete category" }, {
+    return NextResponse.json(data ?? { error: "Failed to delete product" }, {
       status: res.status,
     });
   }
