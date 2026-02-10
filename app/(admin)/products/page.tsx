@@ -115,8 +115,8 @@ export default function ProductsPage() {
                   }
                 >
                   <option value="">دسته‌بندی (همه)</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
+                  {categories.map((c, i) => (
+                    <option key={`${String(c.id)}-${i}`} value={c.id}>
                       {c.name}
                     </option>
                   ))}

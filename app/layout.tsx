@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AppProviders } from "./providers";
+import { Vazirmatn } from "next/font/google";
 
 export const metadata = {
   icons: {
@@ -7,13 +8,20 @@ export const metadata = {
   },
 };
 
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+  variable: "--font-vazirmatn",
+});
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa" dir="rtl" className={vazirmatn.variable}>
       <body>
         <AppProviders>{children}</AppProviders>
       </body>
