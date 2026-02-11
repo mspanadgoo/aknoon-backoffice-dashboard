@@ -10,7 +10,7 @@ import { useState } from "react";
 const fa = new Intl.NumberFormat("fa-IR");
 
 const currency = (n: number) =>
-  new Intl.NumberFormat("fa-IR").format(n) + " تومان";
+  new Intl.NumberFormat("fa-IR").format(n)
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   PENDING_PAYMENT: "در انتظار پرداخت",
@@ -27,7 +27,7 @@ const columns = [
     accessor: (o: Order) =>
       Array.isArray(o.items) ? fa.format(o.items.length) : 0,
   },
-  { header: "مجموع", accessor: (o: Order) => currency(o.totalPrice) },
+  { header: "مجموع (تومان)", accessor: (o: Order) => currency(o.totalPrice) },
   {
     header: "وضعیت",
     accessor: (o: Order) => (
