@@ -74,7 +74,7 @@ export function Sidebar() {
               className={`flex items-center ${collapsed ? "flex-col gap-3" : "justify-between gap-3"}`}
             >
               <button
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-accent/10 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground ring-1 ring-transparent hover:ring-primary/40 hover:bg-primary/15 hover:text-primary transition-colors"
                 onClick={toggleTheme}
                 aria-label="toggle theme"
                 title="تغییر حالت"
@@ -84,7 +84,7 @@ export function Sidebar() {
               </button>
 
               <button
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-destructive/20 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground ring-1 ring-transparent hover:ring-destructive/40 hover:bg-destructive/15 hover:text-destructive transition-colors"
                 onClick={async () => {
                   try {
                     await fetch("/api/auth/logout", { method: "POST" });
