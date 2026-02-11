@@ -106,7 +106,7 @@ export function LoginForm() {
       )}
 
       <Button
-        className="w-full bg-amber-600 hover:bg-amber-700"
+        className="w-full bg-primary hover:bg-primary/90"
         disabled={isPending}
       >
         {isPending ? "در حال ورود..." : "ورود"}

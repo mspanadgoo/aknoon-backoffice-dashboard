@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CreateProductInput } from "@/api/product/product.types";
 import { useCategories } from "@/api/category/category.hooks";
 import { Category } from "@/api/category/category.types";
+import { useEffect } from "react";
 
 export function ProductForm({
   initialValues,
@@ -22,6 +23,7 @@ export function ProductForm({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CreateProductInput>({
     defaultValues: {
       name: initialValues?.name ?? "",
@@ -30,6 +32,17 @@ export function ProductForm({
       active: initialValues?.active ?? true,
     },
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      reset({
+        name: initialValues.name ?? "",
+        price: initialValues.price ?? 0,
+        categoryId: initialValues.categoryId ?? "",
+        active: initialValues.active ?? true,
+      });
+    }
+  }, [initialValues, reset]);
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +93,7 @@ export function ProductForm({
       </div>
 
       <Button
-        className="w-full bg-amber-600 hover:bg-amber-700"
+        className="w-full bg-primary hover:bg-primary/90"
         disabled={submitting}
       >
         {submitting ? "در حال ارسال..." : mode === "create" ? "ثبت" : "ذخیره"}

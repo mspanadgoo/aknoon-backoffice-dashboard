@@ -18,15 +18,30 @@ export async function listOrders(params: ListOrdersParams = {}) {
     `/api/order?${qs(params as Record<string, string | number | boolean | undefined>)}`,
     { method: "GET" },
   );
-  if (!res.ok) throw new Error("Failed to load orders");
-  const data: ListOrdersResponse["data"] = (await res.json())?.data;
+  const raw = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+    data?: ListOrdersResponse["data"];
+  } | null;
+  if (!res.ok) {
+    const msg = raw?.message || raw?.error || "بارگذاری سفارش‌ها ناموفق بود";
+    throw new Error(msg);
+  }
+  const data: ListOrdersResponse["data"] = raw?.data;
   return data ?? { result: [], count: 0 };
 }
 
 export async function getOrder(id: string) {
   const res = await fetch(`/api/order/${id}`, { method: "GET" });
-  if (!res.ok) throw new Error("Failed to load order");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "بارگذاری سفارش ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function createOrder(input: CreateOrderInput) {
@@ -35,8 +50,15 @@ export async function createOrder(input: CreateOrderInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
-  if (!res.ok) throw new Error("Failed to create order");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "ایجاد سفارش ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function updateOrder(id: string, input: UpdateOrderInput) {
@@ -45,14 +67,28 @@ export async function updateOrder(id: string, input: UpdateOrderInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
-  if (!res.ok) throw new Error("Failed to update order");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "به‌روزرسانی سفارش ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function deleteOrder(id: string) {
   const res = await fetch(`/api/order/${id}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Failed to delete order");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "حذف سفارش ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function updateOrderStatus(id: string, status: string) {
@@ -61,28 +97,62 @@ export async function updateOrderStatus(id: string, status: string) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status }),
   });
-  if (!res.ok) throw new Error("Failed to update order status");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg =
+      json?.message || json?.error || "به‌روزرسانی وضعیت سفارش ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function getOrderStatistics() {
   const res = await fetch(`/api/order/statistics`, { method: "GET" });
-  if (!res.ok) throw new Error("Failed to load order statistics");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg =
+      json?.message || json?.error || "بارگذاری آمار سفارش ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function getUserOrderStats(telegramUserId: string | number) {
   const res = await fetch(`/api/order/user/${telegramUserId}/orders/stats`, {
     method: "GET",
   });
-  if (!res.ok) throw new Error("Failed to load user order stats");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg =
+      json?.message ||
+      json?.error ||
+      "بارگذاری آمار سفارش‌های کاربر ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function getUserOrders(telegramUserId: string | number) {
   const res = await fetch(`/api/order/user/${telegramUserId}`, {
     method: "GET",
   });
-  if (!res.ok) throw new Error("Failed to load user orders");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg =
+      json?.message || json?.error || "بارگذاری سفارش‌های کاربر ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }

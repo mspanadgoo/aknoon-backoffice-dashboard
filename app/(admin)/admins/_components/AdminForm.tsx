@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CreateAdminInput } from "@/api/admin/admin.types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 export function AdminForm({
@@ -22,6 +22,7 @@ export function AdminForm({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CreateAdminInput>({
     defaultValues: {
       firstName: initialValues?.firstName ?? "",
@@ -30,6 +31,17 @@ export function AdminForm({
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      reset({
+        firstName: initialValues.firstName ?? "",
+        lastName: initialValues.lastName ?? "",
+        username: initialValues.username ?? "",
+        password: "",
+      });
+    }
+  }, [initialValues, reset]);
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -101,7 +113,7 @@ export function AdminForm({
       </div>
 
       <Button
-        className="w-full bg-amber-600 hover:bg-amber-700"
+        className="w-full bg-primary hover:bg-primary/90"
         disabled={submitting}
       >
         {submitting ? "در حال ارسال..." : mode === "create" ? "ثبت" : "ذخیره"}

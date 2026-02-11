@@ -1,6 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createCategory, deleteCategory, getCategory, listCategories, updateCategory } from "./category.api";
-import { CreateCategoryInput, ListCategoriesParams, UpdateCategoryInput } from "./category.types";
+import {
+  createCategory,
+  deleteCategory,
+  getCategory,
+  listCategories,
+  updateCategory,
+} from "./category.api";
+import {
+  CreateCategoryInput,
+  ListCategoriesParams,
+  UpdateCategoryInput,
+} from "./category.types";
 import { useToast } from "@/hooks/toast";
 
 export function useCategories(params: ListCategoriesParams = {}) {
@@ -27,8 +37,10 @@ export function useCreateCategory() {
       toast.success("دسته‌بندی با موفقیت ایجاد شد");
       qc.invalidateQueries({ queryKey: ["categories"] });
     },
-    onError: () => {
-      toast.error("ایجاد دسته‌بندی ناموفق بود");
+    onError: (err) => {
+      const msg =
+        err instanceof Error ? err.message : "ایجاد دسته‌بندی ناموفق بود";
+      toast.error(msg);
     },
   });
 }
@@ -43,8 +55,10 @@ export function useUpdateCategory(id: string) {
       qc.invalidateQueries({ queryKey: ["categories"] });
       qc.invalidateQueries({ queryKey: ["category", id] });
     },
-    onError: () => {
-      toast.error("به‌روزرسانی دسته‌بندی ناموفق بود");
+    onError: (err) => {
+      const msg =
+        err instanceof Error ? err.message : "به‌روزرسانی دسته‌بندی ناموفق بود";
+      toast.error(msg);
     },
   });
 }
@@ -58,8 +72,10 @@ export function useDeleteCategory() {
       toast.success("حذف دسته‌بندی با موفقیت انجام شد");
       qc.invalidateQueries({ queryKey: ["categories"] });
     },
-    onError: () => {
-      toast.error("حذف دسته‌بندی ناموفق بود");
+    onError: (err) => {
+      const msg =
+        err instanceof Error ? err.message : "حذف دسته‌بندی ناموفق بود";
+      toast.error(msg);
     },
   });
 }

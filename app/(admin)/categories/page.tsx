@@ -74,6 +74,7 @@ export default function CategoriesPage() {
   const [filters, setFilters] = useState<ListCategoriesParams>({});
   const { data, isLoading } = useCategories(filters);
   const rows: Category[] = data?.result ?? [];
+  const [showFilters, setShowFilters] = useState(false);
   return (
     <div className="space-y-4">
       {isLoading && (
@@ -104,7 +105,18 @@ export default function CategoriesPage() {
               </Button>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+              <div className="flex items-center justify-between md:hidden">
+                <button
+                  className="px-3 py-2 rounded bg-secondary text-secondary-foreground"
+                  onClick={() => setShowFilters((v) => !v)}
+                  aria-expanded={showFilters}
+                >
+                  فیلترها
+                </button>
+              </div>
+              <div
+                className={`${showFilters ? "block" : "hidden"} md:grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2`}
+              >
                 <input
                   className="rounded-md border px-3 py-2 text-sm bg-background"
                   placeholder="جستجوی عنوان"

@@ -37,8 +37,9 @@ export function useCreateProduct() {
       toast.success("محصول با موفقیت ایجاد شد");
       qc.invalidateQueries({ queryKey: ["products"] });
     },
-    onError: () => {
-      toast.error("ایجاد محصول ناموفق بود");
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "ایجاد محصول ناموفق بود";
+      toast.error(msg);
     },
   });
 }
@@ -53,8 +54,10 @@ export function useUpdateProduct(id: string) {
       qc.invalidateQueries({ queryKey: ["products"] });
       qc.invalidateQueries({ queryKey: ["product", id] });
     },
-    onError: () => {
-      toast.error("به‌روزرسانی محصول ناموفق بود");
+    onError: (err) => {
+      const msg =
+        err instanceof Error ? err.message : "به‌روزرسانی محصول ناموفق بود";
+      toast.error(msg);
     },
   });
 }
@@ -68,8 +71,9 @@ export function useDeleteProduct() {
       toast.success("حذف محصول با موفقیت انجام شد");
       qc.invalidateQueries({ queryKey: ["products"] });
     },
-    onError: () => {
-      toast.error("حذف محصول ناموفق بود");
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "حذف محصول ناموفق بود";
+      toast.error(msg);
     },
   });
 }

@@ -54,6 +54,7 @@ export default function ProductsPage() {
   const { data: catData } = useCategories({ pageSize: 1000 });
   const categories = catData?.result ?? [];
   const nameById = new Map(categories.map((c) => [c.id, c.name]));
+  const [showFilters, setShowFilters] = useState(false);
   const columns = [
     { header: "عنوان", accessor: (p: Product) => p.name },
     {
@@ -112,7 +113,18 @@ export default function ProductsPage() {
               </Button>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+              <div className="flex items-center justify-between md:hidden">
+                <button
+                  className="px-3 py-2 rounded bg-secondary text-secondary-foreground"
+                  onClick={() => setShowFilters((v) => !v)}
+                  aria-expanded={showFilters}
+                >
+                  فیلترها
+                </button>
+              </div>
+              <div
+                className={`${showFilters ? "block" : "hidden"} md:grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2`}
+              >
                 <input
                   className="rounded-md border px-3 py-2 text-sm bg-background"
                   placeholder="جستجوی عنوان"

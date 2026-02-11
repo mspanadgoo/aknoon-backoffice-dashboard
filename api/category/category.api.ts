@@ -18,15 +18,31 @@ export async function listCategories(params: ListCategoriesParams = {}) {
     `/api/category?${qs(params as Record<string, string | number | boolean | undefined>)}`,
     { method: "GET" },
   );
-  if (!res.ok) throw new Error("Failed to load categories");
-  const data: ListCategoriesResponse["data"] = (await res.json())?.data;
+  const raw = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+    data?: ListCategoriesResponse["data"];
+  } | null;
+  if (!res.ok) {
+    const msg =
+      raw?.message || raw?.error || "بارگذاری دسته‌بندی‌ها ناموفق بود";
+    throw new Error(msg);
+  }
+  const data: ListCategoriesResponse["data"] = raw?.data;
   return data ?? { result: [], count: 0 };
 }
 
 export async function getCategory(id: string) {
   const res = await fetch(`/api/category/${id}`, { method: "GET" });
-  if (!res.ok) throw new Error("Failed to load category");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "بارگذاری دسته‌بندی ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function createCategory(input: CreateCategoryInput) {
@@ -35,8 +51,15 @@ export async function createCategory(input: CreateCategoryInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
-  if (!res.ok) throw new Error("Failed to create category");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "ایجاد دسته‌بندی ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function updateCategory(id: string, input: UpdateCategoryInput) {
@@ -45,12 +68,27 @@ export async function updateCategory(id: string, input: UpdateCategoryInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
-  if (!res.ok) throw new Error("Failed to update category");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg =
+      json?.message || json?.error || "به‌روزرسانی دسته‌بندی ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function deleteCategory(id: string) {
   const res = await fetch(`/api/category/${id}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Failed to delete category");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as {
+    message?: string;
+    error?: string;
+  } | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "حذف دسته‌بندی ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }

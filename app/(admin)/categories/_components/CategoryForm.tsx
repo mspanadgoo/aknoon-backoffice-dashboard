@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CreateCategoryInput } from "@/api/category/category.types";
+import { useEffect } from "react";
 
 export function CategoryForm({
   initialValues,
@@ -20,12 +21,21 @@ export function CategoryForm({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CreateCategoryInput>({
     defaultValues: {
       name: initialValues?.name ?? "",
       active: initialValues?.active ?? true,
     },
   });
+  useEffect(() => {
+    if (initialValues) {
+      reset({
+        name: initialValues.name ?? "",
+        active: initialValues.active ?? true,
+      });
+    }
+  }, [initialValues, reset]);
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -56,7 +66,7 @@ export function CategoryForm({
         </div>
       </div>
 
-      <Button className="w-full bg-amber-600 hover:bg-amber-700" disabled={submitting}>
+      <Button className="w-full bg-primary hover:bg-primary/90" disabled={submitting}>
         {submitting ? "در حال ارسال..." : mode === "create" ? "ثبت" : "ذخیره"}
       </Button>
     </form>

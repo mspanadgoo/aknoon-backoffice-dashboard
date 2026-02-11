@@ -18,15 +18,27 @@ export async function listProducts(params: ListProductsParams = {}) {
     `/api/product?${qs(params as Record<string, string | number | boolean | undefined>)}`,
     { method: "GET" },
   );
-  if (!res.ok) throw new Error("Failed to load products");
-  const data: ListProductsResponse["data"] = (await res.json())?.data;
+  const raw = (await res.json().catch(() => null)) as
+    | { message?: string; error?: string; data?: ListProductsResponse["data"] }
+    | null;
+  if (!res.ok) {
+    const msg = raw?.message || raw?.error || "بارگذاری محصولات ناموفق بود";
+    throw new Error(msg);
+  }
+  const data: ListProductsResponse["data"] = raw?.data;
   return data ?? { result: [], count: 0 };
 }
 
 export async function getProduct(id: string) {
   const res = await fetch(`/api/product/${id}`, { method: "GET" });
-  if (!res.ok) throw new Error("Failed to load product");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as
+    | { message?: string; error?: string }
+    | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "بارگذاری محصول ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function createProduct(input: CreateProductInput) {
@@ -35,8 +47,14 @@ export async function createProduct(input: CreateProductInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
-  if (!res.ok) throw new Error("Failed to create product");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as
+    | { message?: string; error?: string }
+    | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "ایجاد محصول ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function updateProduct(id: string, input: UpdateProductInput) {
@@ -45,12 +63,24 @@ export async function updateProduct(id: string, input: UpdateProductInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
-  if (!res.ok) throw new Error("Failed to update product");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as
+    | { message?: string; error?: string }
+    | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "به‌روزرسانی محصول ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }
 
 export async function deleteProduct(id: string) {
   const res = await fetch(`/api/product/${id}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Failed to delete product");
-  return res.json();
+  const json = (await res.json().catch(() => null)) as
+    | { message?: string; error?: string }
+    | null;
+  if (!res.ok) {
+    const msg = json?.message || json?.error || "حذف محصول ناموفق بود";
+    throw new Error(msg);
+  }
+  return json;
 }

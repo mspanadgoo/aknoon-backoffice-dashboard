@@ -77,7 +77,10 @@ export default function DashboardPage() {
         <div className="absolute inset-0 bg-linear-to-l from-bakery-accent/20 to-transparent pointer-events-none" />
         <div className="p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center lg:text-right">
-            <h1 className="text-3xl lg:text-4xl font-extrabold text-primary">
+            <h1
+              className="text-3xl lg:text-4xl font-extrabold text-primary"
+              suppressHydrationWarning
+            >
               {adminName
                 ? `خوش آمدید، ${adminName}`
                 : "به داشبورد اکنون خوش آمدید"}

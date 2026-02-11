@@ -9,8 +9,9 @@ export function useLogin() {
     onSuccess: () => {
       toast.success("ورود با موفقیت انجام شد");
     },
-    onError: () => {
-      toast.error("ورود ناموفق بود");
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "ورود ناموفق بود";
+      toast.error(msg);
     },
   });
 }

@@ -6,8 +6,10 @@ export async function loginApi(data: LoginInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
+  const json = await res.json().catch(() => null);
   if (!res.ok) {
-    throw new Error("Login failed");
+    const msg = (json && (json.message || json.error)) || "خطا در ورود";
+    throw new Error(msg);
   }
-  return res.json();
+  return json;
 }

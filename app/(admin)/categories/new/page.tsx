@@ -13,8 +13,8 @@ export default function CategoryNewPage() {
       onSuccess: () => router.push("/categories"),
     });
   return (
-    <div className="max-w-xl">
-      <Card>
+    <div className="w-full max-w-2xl mx-auto px-2 md:px-4">
+      <Card className="rounded-2xl shadow-sm">
         <CardHeader>
           <CardTitle className="text-primary">افزودن دسته‌بندی</CardTitle>
         </CardHeader>

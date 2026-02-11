@@ -1,5 +1,11 @@
- "use client";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+"use client";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { CheckCircle2, AlertTriangle, XCircle, Info } from "lucide-react";
 
 type ToastType = "success" | "error" | "warning" | "info";
@@ -29,23 +35,29 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
-  const show = useCallback((t: Omit<ToastItem, "id">) => {
-    const id = Math.random().toString(36).slice(2);
-    const item: ToastItem = { id, duration: 3000, ...t };
-    setItems((prev) => [item, ...prev]);
-    const d = item.duration ?? 3000;
-    if (d > 0) {
-      setTimeout(() => remove(id), d);
-    }
-  }, [remove]);
+  const show = useCallback(
+    (t: Omit<ToastItem, "id">) => {
+      const id = Math.random().toString(36).slice(2);
+      const item: ToastItem = { id, duration: 3000, ...t };
+      setItems((prev) => [item, ...prev]);
+      const d = item.duration ?? 3000;
+      if (d > 0) {
+        setTimeout(() => remove(id), d);
+      }
+    },
+    [remove],
+  );
 
-  const api = useMemo<ToastContextValue>(() => ({
-    show,
-    success: (message, opts) => show({ type: "success", message, ...opts }),
-    error: (message, opts) => show({ type: "error", message, ...opts }),
-    warning: (message, opts) => show({ type: "warning", message, ...opts }),
-    info: (message, opts) => show({ type: "info", message, ...opts }),
-  }), [show]);
+  const api = useMemo<ToastContextValue>(
+    () => ({
+      show,
+      success: (message, opts) => show({ type: "success", message, ...opts }),
+      error: (message, opts) => show({ type: "error", message, ...opts }),
+      warning: (message, opts) => show({ type: "warning", message, ...opts }),
+      info: (message, opts) => show({ type: "info", message, ...opts }),
+    }),
+    [show],
+  );
 
   return (
     <ToastContext.Provider value={api}>
@@ -55,14 +67,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             className={
-              "flex items-center gap-3 rounded-lg px-4 py-3 shadow-lg border " +
+              "flex items-center gap-3 rounded-lg px-4 py-3 shadow-lg border transition-all animate-in fade-in slide-in-from-top-2 duration-300 " +
               (t.type === "success"
-                ? "bg-green-600 text-white border-green-700"
+                ? "bg-green-100 text-green-900 border-green-200 dark:bg-green-900/30 dark:text-green-100 dark:border-green-800"
                 : t.type === "error"
-                ? "bg-red-600 text-white border-red-700"
-                : t.type === "warning"
-                ? "bg-yellow-500 text-black border-yellow-600"
-                : "bg-blue-600 text-white border-blue-700")
+                  ? "bg-red-100 text-red-900 border-red-200 dark:bg-red-900/30 dark:text-red-100 dark:border-red-800"
+                  : t.type === "warning"
+                    ? "bg-yellow-100 text-yellow-900 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-100 dark:border-yellow-800"
+                    : "bg-blue-100 text-blue-900 border-blue-200 dark:bg-blue-900/30 dark:text-blue-100 dark:border-blue-800")
             }
           >
             {t.type === "success" ? (
@@ -80,7 +92,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             </div>
             <button
               onClick={() => remove(t.id)}
-              className="text-white/90 hover:text-white"
+              className="opacity-70 hover:opacity-100"
               aria-label="dismiss"
             >
               ×

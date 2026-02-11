@@ -42,8 +42,9 @@ export function useCreateOrder() {
       toast.success("سفارش با موفقیت ایجاد شد");
       qc.invalidateQueries({ queryKey: ["orders"] });
     },
-    onError: () => {
-      toast.error("ایجاد سفارش ناموفق بود");
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "ایجاد سفارش ناموفق بود";
+      toast.error(msg);
     },
   });
 }
@@ -58,8 +59,9 @@ export function useUpdateOrder(id: string) {
       qc.invalidateQueries({ queryKey: ["orders"] });
       qc.invalidateQueries({ queryKey: ["order", id] });
     },
-    onError: () => {
-      toast.error("به‌روزرسانی سفارش ناموفق بود");
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "به‌روزرسانی سفارش ناموفق بود";
+      toast.error(msg);
     },
   });
 }
@@ -74,8 +76,9 @@ export function useUpdateOrderStatus(id: string) {
       qc.invalidateQueries({ queryKey: ["orders"] });
       qc.invalidateQueries({ queryKey: ["order", id] });
     },
-    onError: () => {
-      toast.error("به‌روزرسانی وضعیت سفارش ناموفق بود");
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "به‌روزرسانی وضعیت سفارش ناموفق بود";
+      toast.error(msg);
     },
   });
 }
@@ -89,8 +92,9 @@ export function useDeleteOrder() {
       toast.success("حذف سفارش با موفقیت انجام شد");
       qc.invalidateQueries({ queryKey: ["orders"] });
     },
-    onError: () => {
-      toast.error("حذف سفارش ناموفق بود");
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "حذف سفارش ناموفق بود";
+      toast.error(msg);
     },
   });
 }
