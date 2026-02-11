@@ -28,10 +28,34 @@ export async function POST(req: Request) {
       }),
     });
   } catch (e) {
-    return NextResponse.json(
-      { error: "Upstream API unreachable", details: String(e) },
-      { status: 502 },
-    );
+    const isLocalhost = base.includes("localhost");
+    if (isLocalhost) {
+      const fallbackBase = base.replace("localhost", "host.docker.internal");
+      try {
+        res = await fetch(`${fallbackBase}/api/v1/auth/sign-in`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: body.username,
+            password: body.password,
+          }),
+        });
+      } catch (e2) {
+        return NextResponse.json(
+          {
+            error: "Upstream API unreachable",
+            details: String(e2),
+            hint: "If running inside Docker, set API_BASE_URL to http://host.docker.internal:3010",
+          },
+          { status: 502 },
+        );
+      }
+    } else {
+      return NextResponse.json(
+        { error: "Upstream API unreachable", details: String(e) },
+        { status: 502 },
+      );
+    }
   }
 
   const data = await res.json().catch(() => null);
