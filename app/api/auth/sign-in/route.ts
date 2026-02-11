@@ -73,7 +73,10 @@ export async function POST(req: Request) {
     );
   }
 
-  const secure = process.env.NODE_ENV === "production";
+  const forwarded = req.headers.get("x-forwarded-proto") ?? "";
+  const envSecure = (process.env.COOKIE_SECURE ?? "").toLowerCase() === "true";
+  const isHttps = forwarded.includes("https");
+  const secure = envSecure || isHttps;
   const response = NextResponse.json({
     user: {
       id: data?.userId,
