@@ -5,9 +5,9 @@ module.exports = {
     extend: {
       colors: {
         bakery: {
-          light: "#ffffff",
-          dark: "#0f172a",
-          accent: "#1d4ed8",
+          light: "#f5f7fb",
+          dark: "#0b1a2f",
+          accent: "#1e3a8a",
           card: "#0f172a",
         },
       },
