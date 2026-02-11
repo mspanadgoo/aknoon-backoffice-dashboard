@@ -1,0 +1,16 @@
+.git
+.gitignore
+node_modules
+.next
+out
+build
+.vscode
+.DS_Store
+*.pem
+coverage
+.pnpm-debug.log*
+*.tsbuildinfo
+.vercel
+Dockerfile*
+.env*
+README.md
