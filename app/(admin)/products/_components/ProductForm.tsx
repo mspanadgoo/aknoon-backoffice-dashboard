@@ -46,7 +46,7 @@ export function ProductForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="price">قیمت</Label>
+        <Label htmlFor="price">قیمت (تومان)</Label>
         <Input
           id="price"
           type="number"

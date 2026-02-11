@@ -8,6 +8,7 @@ import { Product, ListProductsParams } from "@/api/product/product.types";
 import { useRouter } from "next/navigation";
 import { useCategories } from "@/api/category/category.hooks";
 import { useState } from "react";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 const currency = (n: number) =>
   new Intl.NumberFormat("fa-IR").format(n) + " تومان";
@@ -15,6 +16,7 @@ const currency = (n: number) =>
 function RowActions(row: Product) {
   const router = useRouter();
   const { mutate } = useDeleteProduct();
+  const [open, setOpen] = useState(false);
   return (
     <div className="flex justify-center gap-2">
       <Button
@@ -29,10 +31,19 @@ function RowActions(row: Product) {
         variant="ghost"
         size="icon"
         title="حذف"
-        onClick={() => mutate(row.id)}
+        onClick={() => setOpen(true)}
       >
         <Trash2 />
       </Button>
+      <ConfirmDialog
+        open={open}
+        title="حذف محصول"
+        description="آیا از حذف این محصول مطمئن هستید؟ این عملیات قابل بازگشت نیست."
+        confirmText="حذف"
+        cancelText="انصراف"
+        onConfirm={() => mutate(row.id)}
+        onClose={() => setOpen(false)}
+      />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { useAdmins, useDeleteAdmin } from "@/api/admin/admin.hooks";
 import { Admin, ListAdminsParams } from "@/api/admin/admin.types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 const columns = [
   { header: "نام", accessor: (a: Admin) => `${a.firstName} ${a.lastName}` },
@@ -21,6 +22,7 @@ const columns = [
 function RowActions({ row }: { row: Admin }) {
   const router = useRouter();
   const { mutate } = useDeleteAdmin();
+  const [open, setOpen] = useState(false);
   return (
     <div className="flex justify-center gap-2">
       <Button
@@ -35,10 +37,19 @@ function RowActions({ row }: { row: Admin }) {
         variant="ghost"
         size="icon"
         title="حذف"
-        onClick={() => mutate(row.id)}
+        onClick={() => setOpen(true)}
       >
         <Trash2 />
       </Button>
+      <ConfirmDialog
+        open={open}
+        title="حذف ادمین"
+        description="آیا از حذف این ادمین مطمئن هستید؟ این عملیات قابل بازگشت نیست."
+        confirmText="حذف"
+        cancelText="انصراف"
+        onConfirm={() => mutate(row.id)}
+        onClose={() => setOpen(false)}
+      />
     </div>
   );
 }

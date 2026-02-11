@@ -10,6 +10,7 @@ import {
 import { Category, ListCategoriesParams } from "@/api/category/category.types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 const columns = [
   { header: "عنوان", accessor: (c: Category) => c.name },
@@ -37,6 +38,7 @@ const columns = [
 function RowActions({ row }: { row: Category }) {
   const router = useRouter();
   const { mutate } = useDeleteCategory();
+  const [open, setOpen] = useState(false);
   return (
     <div className="flex justify-center gap-2">
       <Button
@@ -51,10 +53,19 @@ function RowActions({ row }: { row: Category }) {
         variant="ghost"
         size="icon"
         title="حذف"
-        onClick={() => mutate(row.id)}
+        onClick={() => setOpen(true)}
       >
         <Trash2 />
       </Button>
+      <ConfirmDialog
+        open={open}
+        title="حذف دسته‌بندی"
+        description="آیا از حذف این دسته‌بندی مطمئن هستید؟ این عملیات قابل بازگشت نیست."
+        confirmText="حذف"
+        cancelText="انصراف"
+        onConfirm={() => mutate(row.id)}
+        onClose={() => setOpen(false)}
+      />
     </div>
   );
 }
