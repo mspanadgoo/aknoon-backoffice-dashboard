@@ -173,19 +173,12 @@ export default function ProductsPage() {
                 />
                 <select
                   className="rounded-md border px-3 py-2 text-sm bg-background"
-                  value={
-                    filters.active === undefined
-                      ? ""
-                      : filters.active
-                        ? "true"
-                        : "false"
-                  }
+                  value={filters.active ?? ""}
                   onChange={(e) => {
                     const v = e.target.value;
                     setFilters((f) => ({
                       ...f,
-                      active:
-                        v === "" ? undefined : v === "true" ? true : false,
+                      active: v === "" ? undefined : (v as "true" | "false"),
                     }));
                   }}
                 >

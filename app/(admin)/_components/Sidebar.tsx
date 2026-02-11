@@ -18,7 +18,7 @@ import pkg from "../../../package.json";
 
 export function Sidebar() {
   const { open, setOpen, collapsed } = useSidebarStore();
-  const { theme, toggleTheme } = useThemeStore();
+  const { toggleTheme } = useThemeStore();
   const router = useRouter();
 
   const menu = [
@@ -52,7 +52,7 @@ export function Sidebar() {
                 ${collapsed ? "opacity-0 pointer-events-none" : "opacity-100"}
               `}
             >
-              پنل مدیریت
+              پنل مدیریت اکنون
             </h2>
 
             <nav className="space-y-3">
@@ -79,7 +79,8 @@ export function Sidebar() {
                 aria-label="toggle theme"
                 title="تغییر حالت"
               >
-                {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+                <Moon size={18} className="block dark:hidden" />
+                <Sun size={18} className="hidden dark:block" />
               </button>
 
               <button

@@ -13,6 +13,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 export function LoginForm() {
+  type LoginResponse = { user?: { id?: string; name?: string; role?: string } };
   const router = useRouter();
   const toast = useToast();
   const {
@@ -26,7 +27,13 @@ export function LoginForm() {
 
   const onSubmit = (data: LoginInput) =>
     mutate(data, {
-      onSuccess: () => {
+      onSuccess: (res: LoginResponse) => {
+        try {
+          const name = res?.user?.name ?? "";
+          if (typeof window !== "undefined" && name) {
+            localStorage.setItem("user_name", name);
+          }
+        } catch {}
         toast.success("ورود موفق");
         router.replace("/dashboard");
       },

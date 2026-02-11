@@ -17,7 +17,7 @@ export type ListCategoriesParams = {
   page?: number;
   pageSize?: number;
   name?: string;
-  active?: boolean;
+  active?: "true" | "false";
   sortName?: 1 | -1;
   sortCreatedAt?: 1 | -1;
 };

@@ -24,7 +24,7 @@ export type ListProductsParams = {
   categoryId?: string;
   minPrice?: number;
   maxPrice?: number;
-  active?: boolean;
+  active?: "true" | "false";
   sortName?: 1 | -1;
   sortPrice?: 1 | -1;
   sortCreatedAt?: 1 | -1;
