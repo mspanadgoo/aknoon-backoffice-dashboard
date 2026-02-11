@@ -6,6 +6,28 @@ import { useState } from "react";
 export default function DashboardPage() {
   const { data, isLoading } = useOrderStatistics();
   const stats = data ?? {};
+  type StatsShape = {
+    data?: Record<string, unknown>;
+    totalOrders?: number;
+    count?: number;
+    byStatus?: Record<string, number>;
+    deliveredCount?: number;
+    pendingPayment?: number;
+    pendingPaymentCount?: number;
+    pendingConfirmation?: number;
+    pendingConfirmationCount?: number;
+    confirmed?: number;
+    confirmedCount?: number;
+    revenueToday?: number;
+    totalRevenue?: number;
+    revenue?: { today?: number; byDay?: Array<{ day: string; value: number }> };
+    orders?: { byDay?: Array<{ day: string; value: number }> };
+    revenueByDay?: Array<{ day: string; value: number }>;
+    ordersByDay?: Array<{ day: string; value: number }>;
+  };
+  const s =
+    ((stats as StatsShape)?.data as StatsShape | undefined) ??
+    (stats as StatsShape);
   const fa = new Intl.NumberFormat("fa-IR");
   const [adminName] = useState<string>(() =>
     typeof window !== "undefined"
@@ -14,42 +36,43 @@ export default function DashboardPage() {
   );
 
   const totalOrders =
-    (stats.totalOrders as number | undefined) ??
-    (stats.count as number | undefined) ??
+    (s.totalOrders as number | undefined) ??
+    (s.count as number | undefined) ??
     0;
-  const byStatus = (stats.byStatus as Record<string, number> | undefined) ?? {};
+  const byStatus = (s.byStatus as Record<string, number> | undefined) ?? {};
   const delivered =
-    byStatus["DELIVERED"] ?? (stats.deliveredCount as number | undefined) ?? 0;
+    byStatus["DELIVERED"] ?? (s.deliveredCount as number | undefined) ?? 0;
   const pendingPayment =
     byStatus["PENDING_PAYMENT"] ??
-    (stats.pendingPaymentCount as number | undefined) ??
+    (s.pendingPayment as number | undefined) ??
+    (s.pendingPaymentCount as number | undefined) ??
     0;
   const pendingConfirmation =
     byStatus["PENDING_CONFIRMATION"] ??
-    (stats.pendingConfirmationCount as number | undefined) ??
+    (s.pendingConfirmation as number | undefined) ??
+    (s.pendingConfirmationCount as number | undefined) ??
     0;
   const confirmed =
-    byStatus["CONFIRMED"] ?? (stats.confirmedCount as number | undefined) ?? 0;
-
+    byStatus["CONFIRMED"] ??
+    (s.confirmed as number | undefined) ??
+    (s.confirmedCount as number | undefined) ??
+    0;
   const revenueToday =
-    (stats.revenueToday as number | undefined) ??
-    (stats.revenue?.today as number | undefined) ??
+    (s.revenueToday as number | undefined) ??
+    (s.totalRevenue as number | undefined) ??
+    (s.revenue?.today as number | undefined) ??
     0;
   const revenueByDay =
-    (stats.revenueByDay as Array<{ day: string; value: number }> | undefined) ??
-    (stats.revenue?.byDay as
-      | Array<{ day: string; value: number }>
-      | undefined) ??
+    (s.revenueByDay as Array<{ day: string; value: number }> | undefined) ??
+    (s.revenue?.byDay as Array<{ day: string; value: number }> | undefined) ??
     [];
   const ordersByDay =
-    (stats.ordersByDay as Array<{ day: string; value: number }> | undefined) ??
-    (stats.orders?.byDay as
-      | Array<{ day: string; value: number }>
-      | undefined) ??
+    (s.ordersByDay as Array<{ day: string; value: number }> | undefined) ??
+    (s.orders?.byDay as Array<{ day: string; value: number }> | undefined) ??
     [];
 
   return (
-    <div className="p-6 rounded-xl transition-colors duration-300 space-y-6">
+    <div className="px-2 md:px-6 py-6 rounded-xl transition-colors duration-300 space-y-6">
       <div className="relative overflow-hidden rounded-2xl border bg-card text-card-foreground">
         <div className="absolute inset-0 bg-linear-to-l from-bakery-accent/20 to-transparent pointer-events-none" />
         <div className="p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -120,7 +143,7 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
-          <div className="text-sm text-muted-foreground">درآمد امروز</div>
+          <div className="text-sm text-muted-foreground">کل درآمد</div>
           <div className="text-3xl font-bold mt-2">
             {isLoading ? "..." : `${fa.format(revenueToday)} تومان`}
           </div>

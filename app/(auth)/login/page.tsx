@@ -27,7 +27,9 @@ export default function LoginPage() {
           </Card>
         </div>
       </div>
-      <Footer />
+      <div className="hidden md:block">
+        <Footer />
+      </div>
     </div>
   );
 }

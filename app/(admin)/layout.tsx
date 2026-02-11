@@ -25,7 +25,9 @@ export default function AdminLayout({
           </div>
           {children}
         </main>
-        <Footer />
+        <div className="hidden md:block">
+          <Footer />
+        </div>
       </div>
     </div>
   );

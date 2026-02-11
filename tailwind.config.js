@@ -5,10 +5,10 @@ module.exports = {
     extend: {
       colors: {
         bakery: {
-          light: "#fef7e5", // warm cream
-          dark: "#2b1b12", // deep cocoa
-          accent: "#d97706", // amber glaze
-          card: "#3a261a", // chocolate card
+          light: "#ffffff",
+          dark: "#0f172a",
+          accent: "#1d4ed8",
+          card: "#0f172a",
         },
       },
     },

@@ -60,7 +60,7 @@ export function Sidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/10 text-foreground"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-sidebar-accent/20 text-sidebar-foreground"
                 >
                   {item.icon}
                   {!collapsed && <span>{item.title}</span>}
@@ -95,7 +95,7 @@ export function Sidebar() {
                 title="خروج"
               >
                 <LogOut size={18} />
-                {!collapsed && <span>خروج</span>}
+                {!collapsed && <span className="hidden md:inline">خروج</span>}
               </button>
             </div>
             <div className={`mt-3 text-xs text-muted-foreground text-center`}>
