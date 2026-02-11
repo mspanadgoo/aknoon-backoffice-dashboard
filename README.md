@@ -50,7 +50,7 @@ pnpm install
 pnpm dev
 ```
 
-Open http://localhost:3000.
+Open <http://localhost:3000>.
 
 ## Docker
 
@@ -65,7 +65,7 @@ Using docker-compose for easy deployment:
 
 # 1) Create .env with your API base URL
 
-echo "NEXT_PUBLIC_API_BASE_URL=https://your-api.example.com" > .env
+echo "NEXT_PUBLIC_API_BASE_URL=<https://your-api.example.com>" > .env
 
 # 2) Build and start in background
 
