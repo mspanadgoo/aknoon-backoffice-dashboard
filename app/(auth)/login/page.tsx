@@ -14,7 +14,13 @@ export default function LoginPage() {
           <Card className="shadow-xl border-none rounded-2xl overflow-hidden">
             <CardHeader className="text-center space-y-2">
               <div className="flex justify-center">
-                <Image src="/favicon.svg" alt="اکنون" width={40} height={40} />
+                <Image
+                  src="/logo.svg"
+                  alt="اکنون"
+                  width={40}
+                  height={40}
+                  className="rounded-full bg-bakery-light p-1 border border-primary/10"
+                />
               </div>
               <CardTitle className="text-2xl font-bold text-primary">
                 ورود به پنل مدیریت اکنون

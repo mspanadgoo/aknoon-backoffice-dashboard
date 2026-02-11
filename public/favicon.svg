@@ -1,13 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#F59E0B"/>
-      <stop offset="1" stop-color="#8B5CF6"/>
-    </linearGradient>
-  </defs>
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#g)" />
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="#f5f3c4"/>
   <g transform="translate(32,32)">
-    <circle r="14" fill="rgba(255,255,255,0.85)"/>
-    <text x="0" y="6" font-size="16" font-family="system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif" text-anchor="middle" fill="#111827">A</text>
+    <text
+      x="0"
+      y="0"
+      font-size="18"
+      font-weight="700"
+      font-style="italic"
+      font-family="Vazirmatn, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      fill="#1e3a8a"
+    >اَک</text>
   </g>
 </svg>

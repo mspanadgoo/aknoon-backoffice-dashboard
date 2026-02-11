@@ -22,14 +22,25 @@ export function Header() {
         </button>
 
         <div className="hidden md:flex items-center gap-2 justify-end">
-          <Image src="/favicon.svg" alt="اکنون" width={24} height={24} />
+          <Image
+            src="/logo.svg"
+            alt="اکنون"
+            width={24}
+            height={24}
+            className="rounded-full bg-bakery-light p-0.5"
+          />
           <span className="font-bold">اکنون</span>
         </div>
-
       </div>
 
       <div className="flex items-center justify-center md:hidden">
-        <Image src="/favicon.svg" alt="اکنون" width={28} height={28} />
+        <Image
+          src="/logo.svg"
+          alt="اکنون"
+          width={28}
+          height={28}
+          className="rounded-full bg-bakery-light p-0.5"
+        />
       </div>
     </header>
   );

@@ -5,6 +5,14 @@ import { Vazirmatn } from "next/font/google";
 export const metadata = {
   icons: {
     icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/logo.svg",
+  },
+  openGraph: {
+    images: ["/logo.svg"],
+  },
+  twitter: {
+    images: ["/logo.svg"],
   },
 };
 

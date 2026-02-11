@@ -114,11 +114,11 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-center justify-center">
             <Image
-              src="/favicon.svg"
+              src="/logo.svg"
               alt="اکنون"
               width={112}
               height={112}
-              className="w-24 h-24 lg:w-28 lg:h-28 drop-shadow-lg"
+              className="w-24 h-24 lg:w-28 lg:h-28 drop-shadow-lg rounded-full bg-bakery-light p-2 border border-primary/10"
               priority
             />
           </div>
