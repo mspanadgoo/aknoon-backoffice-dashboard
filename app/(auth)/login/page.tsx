@@ -6,7 +6,7 @@ import { Footer } from "@/components/ui/footer";
 export default function LoginPage() {
   return (
     <div
-      className="min-h-screen flex flex-col bg-linear-to-br from-bakery-light to-bakery-accent/20"
+      className="min-h-screen flex flex-col bg-linear-to-br from-bakery-light via-bakery-logo/10 to-bakery-accent/20"
       dir="rtl"
     >
       <div className="flex-1 flex items-center justify-center p-4">
@@ -14,13 +14,7 @@ export default function LoginPage() {
           <Card className="shadow-xl border-none rounded-2xl overflow-hidden">
             <CardHeader className="text-center space-y-2">
               <div className="flex justify-center">
-                <Image
-                  src="/logo.svg"
-                  alt="اکنون"
-                  width={40}
-                  height={40}
-                  className="rounded-full bg-bakery-light p-1 border border-primary/10"
-                />
+                <Image src="/favicon.svg" alt="اکنون" width={40} height={40} />
               </div>
               <CardTitle className="text-2xl font-bold text-primary">
                 ورود به پنل مدیریت اکنون

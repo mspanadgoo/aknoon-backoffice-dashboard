@@ -74,7 +74,7 @@ export default function DashboardPage() {
   return (
     <div className="px-2 md:px-6 py-6 rounded-xl transition-colors duration-300 space-y-6">
       <div className="relative overflow-hidden rounded-2xl border bg-card text-card-foreground">
-        <div className="absolute inset-0 bg-linear-to-l from-bakery-accent/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-l from-bakery-accent/20 via-bakery-logo/10 to-transparent pointer-events-none" />
         <div className="p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center lg:text-right">
             <h1
@@ -118,7 +118,7 @@ export default function DashboardPage() {
               alt="اکنون"
               width={112}
               height={112}
-              className="w-24 h-24 lg:w-28 lg:h-28 drop-shadow-lg rounded-full bg-bakery-light p-2 border border-primary/10"
+              className="w-24 h-24 lg:w-24 lg:h-24 drop-shadow-lg rounded-full"
               priority
             />
           </div>
