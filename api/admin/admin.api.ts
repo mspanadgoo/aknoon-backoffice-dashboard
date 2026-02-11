@@ -3,6 +3,7 @@ import {
   ListAdminsParams,
   ListAdminsResponse,
   UpdateAdminInput,
+  Admin,
 } from "./admin.types";
 
 const qs = (params: Record<string, string | number | undefined>) =>
@@ -33,17 +34,18 @@ export async function listAdmins(params: ListAdminsParams = {}) {
   return { result, count };
 }
 
-export async function getAdmin(id: string) {
+export async function getAdmin(id: string): Promise<Admin> {
   const res = await fetch(`/api/admin/${id}`, { method: "GET" });
-  const json = (await res.json().catch(() => null)) as {
-    message?: string;
-    error?: string;
-  } | null;
+  const json = (await res.json().catch(() => null)) as
+    | Admin
+    | { message?: string; error?: string }
+    | null;
   if (!res.ok) {
-    const msg = json?.message || json?.error || "بارگذاری ادمین ناموفق بود";
+    const err = json as { message?: string; error?: string } | null;
+    const msg = err?.message || err?.error || "بارگذاری ادمین ناموفق بود";
     throw new Error(msg);
   }
-  return json;
+  return json as Admin;
 }
 
 export async function createAdmin(input: CreateAdminInput) {

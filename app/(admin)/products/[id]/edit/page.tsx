@@ -3,17 +3,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProductForm } from "@/app/(admin)/products/_components/ProductForm";
 import { useParams, useRouter } from "next/navigation";
 import { useProduct, useUpdateProduct } from "@/api/product/product.hooks";
-import { CreateProductInput } from "@/api/product/product.types";
+import {
+  CreateProductInput,
+  UpdateProductInput,
+} from "@/api/product/product.types";
 
 export default function ProductEditPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { data, isLoading } = useProduct(id);
   const { mutate, isPending } = useUpdateProduct(id);
-  const handleSubmit = (values: CreateProductInput) =>
-    mutate(values, {
+  const handleSubmit = (values: CreateProductInput) => {
+    const payload: UpdateProductInput = {
+      name: values.name,
+      price: values.price,
+      categoryId: values.categoryId,
+      active: values.active,
+    };
+    return mutate(payload, {
       onSuccess: () => router.push("/products"),
     });
+  };
   return (
     <div className="w-full max-w-2xl mx-auto px-2 md:px-4">
       <Card className="rounded-2xl shadow-sm">

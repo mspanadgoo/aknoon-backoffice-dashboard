@@ -3,6 +3,7 @@ import {
   ListCategoriesParams,
   ListCategoriesResponse,
   UpdateCategoryInput,
+  Category,
 } from "./category.types";
 
 const qs = (params: Record<string, string | number | boolean | undefined>) =>
@@ -32,17 +33,18 @@ export async function listCategories(params: ListCategoriesParams = {}) {
   return data ?? { result: [], count: 0 };
 }
 
-export async function getCategory(id: string) {
+export async function getCategory(id: string): Promise<Category> {
   const res = await fetch(`/api/category/${id}`, { method: "GET" });
-  const json = (await res.json().catch(() => null)) as {
-    message?: string;
-    error?: string;
-  } | null;
+  const json = (await res.json().catch(() => null)) as
+    | Category
+    | { message?: string; error?: string }
+    | null;
   if (!res.ok) {
-    const msg = json?.message || json?.error || "بارگذاری دسته‌بندی ناموفق بود";
+    const err = json as { message?: string; error?: string } | null;
+    const msg = err?.message || err?.error || "بارگذاری دسته‌بندی ناموفق بود";
     throw new Error(msg);
   }
-  return json;
+  return json as Category;
 }
 
 export async function createCategory(input: CreateCategoryInput) {
