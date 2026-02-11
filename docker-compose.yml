@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  aknoon-dashboard:
+    build:
+      context: .
+    image: aknoon-dashboard:latest
+    container_name: aknoon-dashboard
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

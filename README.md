@@ -59,14 +59,33 @@ Build and run:
 ```
 docker build -t aknoon-dashboard .
 docker run -e NEXT_PUBLIC_API_BASE_URL=https://your-api.example.com -p 3000:3000 aknoon-dashboard
+## Docker Compose
+Using docker-compose for easy deployment:
+```
+
+# 1) Create .env with your API base URL
+
+echo "NEXT_PUBLIC_API_BASE_URL=https://your-api.example.com" > .env
+
+# 2) Build and start in background
+
+docker compose up -d --build
+
+# 3) View logs
+
+docker compose logs -f
+
+# 4) Stop
+
+docker compose down
+
+```
+
 ```
 
 ## Project Structure
 
 ```
-app/
-  (admin)/
-    layout.tsx       # admin shell with sidebar, header, breadcrumb, back button
     orders/          # orders list and modal
     products/        # products list + filters
     categories/      # categories list + filters
