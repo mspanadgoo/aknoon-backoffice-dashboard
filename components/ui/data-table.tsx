@@ -199,7 +199,7 @@ export function DataTable<TData>({
               <React.Fragment key={ri}>
                 <tr
                   className={cn(
-                    "border-t border-border odd:bg-accent/5 even:bg-card",
+                    "border-t border-border even:bg-accent/5 odd:bg-card",
                     onRowClick && "cursor-pointer",
                   )}
                   onClick={() => onRowClick?.(row)}
