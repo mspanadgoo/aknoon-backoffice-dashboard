@@ -13,7 +13,7 @@ const columns = [
   { header: "نام", accessor: (a: Admin) => `${a.firstName} ${a.lastName}` },
   { header: "نام کاربری", accessor: (a: Admin) => a.username },
   {
-    header: "ایجاد",
+    header: "تاریخ",
     accessor: (a: Admin) =>
       a.createdAt ? new Date(a.createdAt).toLocaleDateString("fa-IR") : "-",
   },

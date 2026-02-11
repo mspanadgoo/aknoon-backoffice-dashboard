@@ -7,6 +7,8 @@ import { Order, OrderStatus } from "@/api/order/order.types";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
+const fa = new Intl.NumberFormat("fa-IR");
+
 const currency = (n: number) =>
   new Intl.NumberFormat("fa-IR").format(n) + " تومان";
 
@@ -22,7 +24,8 @@ const columns = [
   { header: "شناسه تلگرام", accessor: (o: Order) => o.telegramUserId },
   {
     header: "آیتم‌ها",
-    accessor: (o: Order) => (Array.isArray(o.items) ? o.items.length : 0),
+    accessor: (o: Order) =>
+      Array.isArray(o.items) ? fa.format(o.items.length) : 0,
   },
   { header: "مجموع", accessor: (o: Order) => currency(o.totalPrice) },
   {
@@ -34,7 +37,7 @@ const columns = [
     ),
   },
   {
-    header: "ایجاد",
+    header: "تاریخ",
     accessor: (o: Order) =>
       o.createdAt ? new Date(o.createdAt).toLocaleDateString("fa-IR") : "-",
   },

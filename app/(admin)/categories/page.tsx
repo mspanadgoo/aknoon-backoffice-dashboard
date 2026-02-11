@@ -15,7 +15,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 const columns = [
   { header: "عنوان", accessor: (c: Category) => c.name },
   {
-    header: "فعال",
+    header: "وضعیت",
     accessor: (c: Category) => (
       <span
         className={
@@ -29,7 +29,7 @@ const columns = [
     ),
   },
   {
-    header: "ایجاد",
+    header: "تاریخ",
     accessor: (c: Category) =>
       c.createdAt ? new Date(c.createdAt).toLocaleDateString("fa-IR") : "-",
   },

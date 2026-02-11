@@ -10,8 +10,7 @@ import { useCategories } from "@/api/category/category.hooks";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
-const currency = (n: number) =>
-  new Intl.NumberFormat("fa-IR").format(n) + " تومان";
+const currency = (n: number) => new Intl.NumberFormat("fa-IR").format(n);
 
 function RowActions(row: Product) {
   const router = useRouter();
@@ -61,7 +60,7 @@ export default function ProductsPage() {
       header: "دسته",
       accessor: (p: Product) => nameById.get(p.categoryId) ?? p.categoryId,
     },
-    { header: "قیمت", accessor: (p: Product) => currency(p.price) },
+    { header: "قیمت (تومان)", accessor: (p: Product) => currency(p.price) },
     {
       header: "فعال",
       accessor: (p: Product) => (
@@ -77,7 +76,7 @@ export default function ProductsPage() {
       ),
     },
     {
-      header: "ایجاد",
+      header: "تاریخ",
       accessor: (p: Product) =>
         p.createdAt ? new Date(p.createdAt).toLocaleDateString("fa-IR") : "-",
     },
