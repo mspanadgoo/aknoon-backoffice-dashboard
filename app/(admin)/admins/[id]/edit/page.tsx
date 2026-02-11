@@ -11,11 +11,12 @@ export default function AdminEditPage() {
   const { data, isLoading } = useAdmin(id);
   const { mutate, isPending } = useUpdateAdmin(id);
   const handleSubmit = (values: CreateAdminInput) => {
+    const pw = values.password?.trim();
     const payload: UpdateAdminInput = {
       firstName: values.firstName,
       lastName: values.lastName,
       username: values.username,
-      ...(values.password ? { password: values.password } : {}),
+      ...(pw ? { password: pw } : {}),
     };
     return mutate(payload, {
       onSuccess: () => router.push("/admins"),

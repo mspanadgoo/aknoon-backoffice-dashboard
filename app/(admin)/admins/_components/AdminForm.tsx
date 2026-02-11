@@ -101,10 +101,8 @@ export function AdminForm({
           mode={mode}
           registerPassword={register("password", {
             required: mode === "create" ? "رمز عبور الزامی است" : false,
-            pattern: {
-              value: /^[\x20-\x7E]+$/,
-              message: "رمز عبور باید انگلیسی باشد",
-            },
+            validate: (v) =>
+              !v || /^[\x20-\x7E]+$/.test(v) || "رمز عبور باید انگلیسی باشد",
           })}
         />
         {errors.password && (
