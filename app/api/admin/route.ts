@@ -2,7 +2,8 @@
  import { cookies } from "next/headers";
  
  export async function GET(req: Request) {
-   const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+   const base =
+     process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
    if (!base) {
      return NextResponse.json({ error: "API base URL not configured" }, { status: 500 });
    }
@@ -16,9 +17,17 @@
    const page = url.searchParams.get("page") ?? "1";
    const pageSize = url.searchParams.get("pageSize") ?? "10";
  
-   const res = await fetch(`${base}/api/v1/admin?name=${encodeURIComponent(name)}&page=${page}&pageSize=${pageSize}`, {
-     headers: { Authorization: `Bearer ${token}` },
-   });
+   let res: Response;
+   try {
+     res = await fetch(`${base}/api/v1/admin?name=${encodeURIComponent(name)}&page=${page}&pageSize=${pageSize}`, {
+       headers: { Authorization: `Bearer ${token}` },
+     });
+   } catch (e) {
+     return NextResponse.json(
+       { error: "Upstream API unreachable", details: String(e) },
+       { status: 502 }
+     );
+   }
    const data = await res.json().catch(() => null);
    if (!res.ok) {
      return NextResponse.json(data ?? { error: "Failed to fetch admins" }, { status: res.status });
@@ -27,7 +36,8 @@
  }
  
  export async function POST(req: Request) {
-   const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+   const base =
+     process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
    if (!base) {
      return NextResponse.json({ error: "API base URL not configured" }, { status: 500 });
    }
@@ -40,11 +50,19 @@
    if (!body) {
      return NextResponse.json({ error: "Invalid body" }, { status: 400 });
    }
-   const res = await fetch(`${base}/api/v1/admin`, {
-     method: "POST",
-     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-     body: JSON.stringify(body),
-   });
+   let res: Response;
+   try {
+     res = await fetch(`${base}/api/v1/admin`, {
+       method: "POST",
+       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+       body: JSON.stringify(body),
+     });
+   } catch (e) {
+     return NextResponse.json(
+       { error: "Upstream API unreachable", details: String(e) },
+       { status: 502 }
+     );
+   }
    const data = await res.json().catch(() => null);
    if (!res.ok) {
      return NextResponse.json(data ?? { error: "Failed to create admin" }, { status: res.status });

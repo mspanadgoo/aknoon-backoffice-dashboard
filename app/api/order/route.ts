@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 export async function GET(req: Request) {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const base =
+    process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
   if (!base) {
     return NextResponse.json(
       { error: "API base URL not configured" },
@@ -41,9 +42,17 @@ export async function GET(req: Request) {
   if (page) qs.set("page", page);
   if (pageSize) qs.set("pageSize", pageSize);
 
-  const res = await fetch(`${base}/api/v1/order?${qs.toString()}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${base}/api/v1/order?${qs.toString()}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (e) {
+    return NextResponse.json(
+      { error: "Upstream API unreachable", details: String(e) },
+      { status: 502 },
+    );
+  }
   const data = await res.json().catch(() => null);
   if (!res.ok) {
     return NextResponse.json(
@@ -55,7 +64,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const base =
+    process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
   if (!base) {
     return NextResponse.json(
       { error: "API base URL not configured" },
@@ -72,14 +82,22 @@ export async function POST(req: Request) {
   if (!body) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
-  const res = await fetch(`${base}/api/v1/order`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(body),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${base}/api/v1/order`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+  } catch (e) {
+    return NextResponse.json(
+      { error: "Upstream API unreachable", details: String(e) },
+      { status: 502 },
+    );
+  }
   const data = await res.json().catch(() => null);
   if (!res.ok) {
     return NextResponse.json(
