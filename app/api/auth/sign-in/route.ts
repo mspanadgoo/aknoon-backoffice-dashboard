@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const base = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
   if (!base) {
     return NextResponse.json(
       { error: "API base URL not configured" },
@@ -17,11 +17,22 @@ export async function POST(req: Request) {
     );
   }
 
-  const res = await fetch(`${base}/api/v1/auth/sign-in`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: body.username, password: body.password }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${base}/api/v1/auth/sign-in`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: body.username,
+        password: body.password,
+      }),
+    });
+  } catch (e) {
+    return NextResponse.json(
+      { error: "Upstream API unreachable", details: String(e) },
+      { status: 502 },
+    );
+  }
 
   const data = await res.json().catch(() => null);
   if (!res.ok) {
