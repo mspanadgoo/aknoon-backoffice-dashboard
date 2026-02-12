@@ -14,7 +14,6 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import pkg from "../../../package.json";
 
 export function Sidebar() {
@@ -22,17 +21,6 @@ export function Sidebar() {
   const { toggleTheme } = useThemeStore();
   const router = useRouter();
   const pathname = usePathname();
-  const [userName] = useState<string>(() =>
-    typeof window !== "undefined"
-      ? localStorage.getItem("user_name") || ""
-      : "",
-  );
-  const nameRef = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    if (nameRef.current) {
-      nameRef.current.textContent = userName || "اکنون";
-    }
-  }, [userName]);
 
   const menu = [
     { title: "داشبورد", href: "/dashboard", icon: <Home size={20} /> },
@@ -64,8 +52,9 @@ export function Sidebar() {
                 text-xl font-bold text-white text-center mb-6 transition-opacity duration-300
                 ${collapsed ? "opacity-0 pointer-events-none" : "opacity-100"}
               `}
-              ref={nameRef}
-            ></h2>
+            >
+              پنل مدیریت اکنون
+            </h2>
 
             <nav className="space-y-3">
               {menu.map((item) => (
