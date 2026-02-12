@@ -18,11 +18,11 @@ const columns = [
     header: "وضعیت",
     accessor: (c: Category) => (
       <span
-        className={
+        className={`px-2 py-1 text-xs rounded ${
           c.active
-            ? "px-2 py-1 text-xs rounded bg-secondary text-secondary-foreground"
-            : "px-2 py-1 text-xs rounded bg-muted text-muted-foreground"
-        }
+            ? "bg-sky-100 text-sky-900 border border-sky-200 dark:bg-sky-900/30 dark:text-sky-100 dark:border-sky-800"
+            : "bg-rose-100 text-rose-900 border border-rose-200 dark:bg-rose-900/30 dark:text-rose-100 dark:border-rose-800"
+        }`}
       >
         {c.active ? "فعال" : "غیرفعال"}
       </span>
