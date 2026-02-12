@@ -24,6 +24,23 @@ export default function DashboardPage() {
     orders?: { byDay?: Array<{ day: string; value: number }> };
     revenueByDay?: Array<{ day: string; value: number }>;
     ordersByDay?: Array<{ day: string; value: number }>;
+    todayRevenue?: number;
+    averageOrderValue?: number;
+    lastWeekRevenue?: number;
+    lastMonthRevenue?: number;
+    last3MonthsRevenue?: number;
+    lastYearRevenue?: number;
+    topProducts?: Array<{
+      productName: string;
+      totalQuantity: number;
+      orderCount: number;
+    }>;
+    topUsers?: Array<{
+      telegramUsername: string;
+      telegramUserId: number;
+      totalSpent: number;
+      orderCount: number;
+    }>;
   };
   const s =
     ((stats as StatsShape)?.data as StatsShape | undefined) ??
@@ -57,19 +74,34 @@ export default function DashboardPage() {
     (s.confirmed as number | undefined) ??
     (s.confirmedCount as number | undefined) ??
     0;
-  const revenueToday =
-    (s.revenueToday as number | undefined) ??
-    (s.totalRevenue as number | undefined) ??
-    (s.revenue?.today as number | undefined) ??
-    0;
-  const revenueByDay =
-    (s.revenueByDay as Array<{ day: string; value: number }> | undefined) ??
-    (s.revenue?.byDay as Array<{ day: string; value: number }> | undefined) ??
-    [];
-  const ordersByDay =
-    (s.ordersByDay as Array<{ day: string; value: number }> | undefined) ??
-    (s.orders?.byDay as Array<{ day: string; value: number }> | undefined) ??
-    [];
+  const totalRevenue = (s.totalRevenue as number | undefined) ?? 0;
+  const revenueToday = (s.todayRevenue as number | undefined) ?? 0;
+  const averageOrderValue = (s.averageOrderValue as number | undefined) ?? 0;
+  const lastWeekRevenue = (s.lastWeekRevenue as number | undefined) ?? 0;
+  const lastMonthRevenue = (s.lastMonthRevenue as number | undefined) ?? 0;
+  const last3MonthsRevenue = (s.last3MonthsRevenue as number | undefined) ?? 0;
+  const lastYearRevenue = (s.lastYearRevenue as number | undefined) ?? 0;
+  const topProducts =
+    (s.topProducts as
+      | Array<{
+          productName: string;
+          totalQuantity: number;
+          orderCount: number;
+        }>
+      | undefined) ?? [];
+  const topUsers =
+    (s.topUsers as
+      | Array<{
+          telegramUsername: string;
+          telegramUserId: number;
+          totalSpent: number;
+          orderCount: number;
+        }>
+      | undefined) ?? [];
+  const maxUserSpent = Math.max(
+    1,
+    ...(Array.isArray(topUsers) ? topUsers.map((u) => u.totalSpent || 0) : []),
+  );
 
   return (
     <div className="px-2 md:px-6 py-6 rounded-xl transition-colors duration-300 space-y-6">
@@ -148,7 +180,43 @@ export default function DashboardPage() {
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">کل درآمد</div>
           <div className="text-3xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(revenueToday)} تومان`}
+            {isLoading ? "..." : `${fa.format(totalRevenue)} تومان`}
+          </div>
+          <div className="mt-1 text-xs text-muted-foreground">
+            امروز: {isLoading ? "..." : `${fa.format(revenueToday)} تومان`}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
+          <div className="text-sm text-muted-foreground">
+            میانگین مبلغ هر سفارش
+          </div>
+          <div className="text-2xl font-bold mt-2">
+            {isLoading ? "..." : `${fa.format(averageOrderValue)} تومان`}
+          </div>
+        </div>
+        <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
+          <div className="text-sm text-muted-foreground">هفته گذشته</div>
+          <div className="text-2xl font-bold mt-2">
+            {isLoading ? "..." : `${fa.format(lastWeekRevenue)} تومان`}
+          </div>
+        </div>
+        <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
+          <div className="text-sm text-muted-foreground">ماه گذشته</div>
+          <div className="text-2xl font-bold mt-2">
+            {isLoading ? "..." : `${fa.format(lastMonthRevenue)} تومان`}
+          </div>
+        </div>
+        <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
+          <div className="text-sm text-muted-foreground">سه‌ماه اخیر</div>
+          <div className="text-2xl font-bold mt-2">
+            {isLoading ? "..." : `${fa.format(last3MonthsRevenue)} تومان`}
+          </div>
+          <div className="mt-1 text-xs text-muted-foreground">
+            سال گذشته:{" "}
+            {isLoading ? "..." : `${fa.format(lastYearRevenue)} تومان`}
           </div>
         </div>
       </div>
@@ -193,27 +261,23 @@ export default function DashboardPage() {
         </div>
 
         <div className="bg-card text-card-foreground p-6 rounded-xl border shadow-sm">
-          <h3 className="text-lg font-semibold text-primary">
-            سفارش‌ها در روزهای اخیر
-          </h3>
-          <div className="mt-4 grid grid-cols-7 gap-2 items-end h-32">
-            {ordersByDay.slice(-7).map((d, idx) => {
-              const max = Math.max(1, ...ordersByDay.map((x) => x.value));
-              const height = Math.round((d.value / max) * 100);
-              return (
-                <div key={idx} className="flex flex-col items-center gap-1">
-                  <div
-                    className="w-6 bg-primary rounded"
-                    style={{ height: `${height}%` }}
-                    aria-label={`${d.day}: ${fa.format(d.value)}`}
-                  />
-                  <div className="text-[10px] text-muted-foreground">
-                    {d.day}
-                  </div>
+          <h3 className="text-lg font-semibold text-primary">محصولات برتر</h3>
+          <div className="mt-4 space-y-2">
+            {(isLoading ? [] : topProducts).slice(0, 6).map((p, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-between text-sm"
+              >
+                <div className="flex-1 truncate">{p.productName}</div>
+                <div className="w-24 text-right text-muted-foreground">
+                  تعداد: {fa.format(p.totalQuantity)}
                 </div>
-              );
-            })}
-            {ordersByDay.length === 0 && (
+                <div className="w-20 text-right text-muted-foreground">
+                  سفارش: {fa.format(p.orderCount)}
+                </div>
+              </div>
+            ))}
+            {!isLoading && topProducts.length === 0 && (
               <div className="text-sm text-muted-foreground">
                 داده‌ای موجود نیست
               </div>
@@ -222,25 +286,53 @@ export default function DashboardPage() {
         </div>
 
         <div className="bg-card text-card-foreground p-6 rounded-xl border shadow-sm lg:col-span-2">
-          <h3 className="text-lg font-semibold text-primary">درآمد روزانه</h3>
-          <div className="mt-4 grid grid-cols-7 gap-2 items-end h-32">
-            {revenueByDay.slice(-7).map((d, idx) => {
-              const max = Math.max(1, ...revenueByDay.map((x) => x.value));
-              const height = Math.round((d.value / max) * 100);
+          <h3 className="text-lg font-semibold text-primary">کاربران برتر</h3>
+          <div className="mt-4 space-y-3">
+            {(isLoading ? [] : topUsers).slice(0, 8).map((u, idx) => {
+              const spentWidth = Math.round(
+                ((u.totalSpent || 0) / maxUserSpent) * 100,
+              );
+              const initial =
+                typeof u.telegramUsername === "string" &&
+                u.telegramUsername.trim().length > 0
+                  ? u.telegramUsername.trim().charAt(0)
+                  : "؟";
               return (
-                <div key={idx} className="flex flex-col items-center gap-1">
-                  <div
-                    className="w-6 bg-secondary rounded"
-                    style={{ height: `${height}%` }}
-                    aria-label={`${d.day}: ${fa.format(d.value)}`}
-                  />
-                  <div className="text-[10px] text-muted-foreground">
-                    {d.day}
+                <div key={`${u.telegramUserId}-${idx}`} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="size-8 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center font-semibold">
+                        {initial}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="truncate font-medium">
+                          {u.telegramUsername}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          ID: {u.telegramUserId}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs rounded bg-muted text-muted-foreground px-2 py-1">
+                        سفارش: {fa.format(u.orderCount)}
+                      </span>
+                      <span className="text-sm font-medium">
+                        {fa.format(u.totalSpent)} تومان
+                      </span>
+                    </div>
+                  </div>
+                  <div className="h-2 bg-muted rounded overflow-hidden">
+                    <div
+                      className="h-2 bg-primary"
+                      style={{ width: `${spentWidth}%` }}
+                      aria-label={`مجموع ${fa.format(u.totalSpent)} تومان`}
+                    />
                   </div>
                 </div>
               );
             })}
-            {revenueByDay.length === 0 && (
+            {!isLoading && topUsers.length === 0 && (
               <div className="text-sm text-muted-foreground">
                 داده‌ای موجود نیست
               </div>
