@@ -17,6 +17,16 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   CONFIRMED: "تایید شده",
   DELIVERED: "تحویل شده",
 };
+const STATUS_STYLES: Record<OrderStatus, string> = {
+  PENDING_PAYMENT:
+    "bg-yellow-100 text-yellow-900 border border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-100 dark:border-yellow-800",
+  PENDING_CONFIRMATION:
+    "bg-indigo-100 text-indigo-900 border border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-100 dark:border-indigo-800",
+  CONFIRMED:
+    "bg-emerald-100 text-emerald-900 border border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-100 dark:border-emerald-800",
+  DELIVERED:
+    "bg-sky-100 text-sky-900 border border-sky-200 dark:bg-sky-900/30 dark:text-sky-100 dark:border-sky-800",
+};
 
 const columns = [
   { header: "کاربر تلگرام", accessor: (o: Order) => o.telegramUsername },
@@ -30,7 +40,9 @@ const columns = [
   {
     header: "وضعیت",
     accessor: (o: Order) => (
-      <span className="px-2 py-1 text-xs rounded bg-secondary text-secondary-foreground">
+      <span
+        className={`px-2 py-1 text-xs rounded ${STATUS_STYLES[o.status as OrderStatus] ?? ""}`}
+      >
         {STATUS_LABELS[o.status as OrderStatus] ?? o.status}
       </span>
     ),
@@ -255,7 +267,11 @@ export default function OrdersPage() {
                     <div>جمع کل: {currency(selected.totalPrice)}</div>
                     <div>
                       وضعیت:{" "}
-                      <span className="px-2 py-1 text-xs rounded bg-secondary text-secondary-foreground">
+                      <span
+                        className={`px-2 py-1 text-xs rounded ${
+                          STATUS_STYLES[selected.status]
+                        }`}
+                      >
                         {STATUS_LABELS[selected.status]}
                       </span>
                     </div>

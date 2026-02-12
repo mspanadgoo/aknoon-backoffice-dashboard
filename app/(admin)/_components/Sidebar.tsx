@@ -53,7 +53,7 @@ export function Sidebar() {
                 ${collapsed ? "opacity-0 pointer-events-none" : "opacity-100"}
               `}
             >
-              پنل مدیریت اکنون
+              پنل مدیریت اَک‌/‌نونْ
             </h2>
 
             <nav className="space-y-3">

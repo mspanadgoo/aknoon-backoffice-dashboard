@@ -11,13 +11,10 @@ export default function DashboardPage() {
     totalOrders?: number;
     count?: number;
     byStatus?: Record<string, number>;
-    deliveredCount?: number;
+    delivered?: number;
     pendingPayment?: number;
-    pendingPaymentCount?: number;
     pendingConfirmation?: number;
-    pendingConfirmationCount?: number;
     confirmed?: number;
-    confirmedCount?: number;
     revenueToday?: number;
     totalRevenue?: number;
     revenue?: { today?: number; byDay?: Array<{ day: string; value: number }> };
@@ -58,21 +55,18 @@ export default function DashboardPage() {
     0;
   const byStatus = (s.byStatus as Record<string, number> | undefined) ?? {};
   const delivered =
-    byStatus["DELIVERED"] ?? (s.deliveredCount as number | undefined) ?? 0;
+    byStatus["DELIVERED"] ?? (s.delivered as number | undefined) ?? 0;
   const pendingPayment =
     byStatus["PENDING_PAYMENT"] ??
     (s.pendingPayment as number | undefined) ??
-    (s.pendingPaymentCount as number | undefined) ??
     0;
   const pendingConfirmation =
     byStatus["PENDING_CONFIRMATION"] ??
     (s.pendingConfirmation as number | undefined) ??
-    (s.pendingConfirmationCount as number | undefined) ??
     0;
   const confirmed =
     byStatus["CONFIRMED"] ??
     (s.confirmed as number | undefined) ??
-    (s.confirmedCount as number | undefined) ??
     0;
   const totalRevenue = (s.totalRevenue as number | undefined) ?? 0;
   const revenueToday = (s.todayRevenue as number | undefined) ?? 0;
@@ -180,10 +174,11 @@ export default function DashboardPage() {
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">کل درآمد</div>
           <div className="text-3xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(totalRevenue)} تومان`}
+            {isLoading ? "..." : `${fa.format(totalRevenue * 1000)} تومان`}
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
-            امروز: {isLoading ? "..." : `${fa.format(revenueToday)} تومان`}
+            امروز:{" "}
+            {isLoading ? "..." : `${fa.format(revenueToday * 1000)} تومان`}
           </div>
         </div>
       </div>
@@ -194,29 +189,31 @@ export default function DashboardPage() {
             میانگین مبلغ هر سفارش
           </div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(averageOrderValue)} تومان`}
+            {isLoading ? "..." : `${fa.format(averageOrderValue * 1000)} تومان`}
           </div>
         </div>
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">هفته گذشته</div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(lastWeekRevenue)} تومان`}
+            {isLoading ? "..." : `${fa.format(lastWeekRevenue * 1000)} تومان`}
           </div>
         </div>
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">ماه گذشته</div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(lastMonthRevenue)} تومان`}
+            {isLoading ? "..." : `${fa.format(lastMonthRevenue * 1000)} تومان`}
           </div>
         </div>
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">سه‌ماه اخیر</div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(last3MonthsRevenue)} تومان`}
+            {isLoading
+              ? "..."
+              : `${fa.format(last3MonthsRevenue * 1000)} تومان`}
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
             سال گذشته:{" "}
-            {isLoading ? "..." : `${fa.format(lastYearRevenue)} تومان`}
+            {isLoading ? "..." : `${fa.format(lastYearRevenue * 1000)} تومان`}
           </div>
         </div>
       </div>
