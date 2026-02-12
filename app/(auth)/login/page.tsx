@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoginForm } from "../_components/LoginForm";
 import { Footer } from "@/components/ui/footer";
@@ -13,15 +12,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <Card className="shadow-xl border-none rounded-2xl overflow-hidden">
             <CardHeader className="text-center space-y-2">
-              <div className="flex justify-center">
-                <Image
-                  src="/logo.svg"
-                  alt="اکنون"
-                  width={40}
-                  height={40}
-                  priority
-                />
-              </div>
+
               <CardTitle className="text-2xl font-bold text-primary">
                 ورود به پنل مدیریت اکنون
               </CardTitle>
