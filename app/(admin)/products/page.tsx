@@ -61,7 +61,10 @@ export default function ProductsPage() {
       header: "دسته",
       accessor: (p: Product) => nameById.get(p.categoryId) ?? p.categoryId,
     },
-    { header: "قیمت (تومان)", accessor: (p: Product) => currency(p.price) },
+    {
+      header: "قیمت (تومان)",
+      accessor: (p: Product) => currency(p.price * 1000),
+    },
     {
       header: "فعال",
       accessor: (p: Product) => (
