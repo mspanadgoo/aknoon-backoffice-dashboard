@@ -231,6 +231,25 @@ export default function OrdersPage() {
               <div className="p-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="space-y-1 text-sm">
+                    <div>
+                      زمان سفارش:{" "}
+                      {selected.createdAt
+                        ? new Date(selected.createdAt).toLocaleTimeString(
+                            "fa-IR",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hourCycle: "h23",
+                            },
+                          )
+                        : "-"}
+                      {" - "}
+                      {selected.createdAt
+                        ? new Date(selected.createdAt).toLocaleDateString(
+                            "fa-IR",
+                          )
+                        : "-"}
+                    </div>
                     <div>کاربر: {selected.telegramUsername}</div>
                     <div>شناسه تلگرام: {selected.telegramUserId}</div>
                     <div>جمع کل: {currency(selected.totalPrice)}</div>
