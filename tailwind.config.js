@@ -9,7 +9,7 @@ module.exports = {
           dark: "#0b1a2f",
           accent: "#1e3a8a",
           card: "#0f172a",
-          logo: "#f5f3c4",
+          logo: "#EBEAC1",
         },
       },
     },

@@ -13,13 +13,26 @@ import {
   Users,
   ShoppingBag,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import pkg from "../../../package.json";
 
 export function Sidebar() {
   const { open, setOpen, collapsed } = useSidebarStore();
   const { toggleTheme } = useThemeStore();
   const router = useRouter();
+  const pathname = usePathname();
+  const [userName] = useState<string>(() =>
+    typeof window !== "undefined"
+      ? localStorage.getItem("user_name") || ""
+      : "",
+  );
+  const nameRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (nameRef.current) {
+      nameRef.current.textContent = userName || "اکنون";
+    }
+  }, [userName]);
 
   const menu = [
     { title: "داشبورد", href: "/dashboard", icon: <Home size={20} /> },
@@ -36,7 +49,7 @@ export function Sidebar() {
   return (
     <>
       <aside
-        className={` fixed md:static top-0 right-0 h-screen bg-sidebar text-sidebar-foreground shadow-lg z-50 transition-all duration-300 ${open ? "translate-x-0" : "translate-x-full md:translate-x-0"} ${collapsed ? "md:w-20" : "md:w-64"} `}
+        className={` fixed md:static top-0 right-0 h-screen bg-sidebar text-sidebar-foreground shadow-lg z-50 transition-all duration-300 w-full ${open ? "translate-x-0" : "translate-x-full md:translate-x-0"} ${collapsed ? "md:w-20" : "md:w-64"} `}
       >
         <div className="h-full flex flex-col">
           <div className="flex justify-end p-4 md:hidden">
@@ -48,19 +61,22 @@ export function Sidebar() {
           <div className="p-4">
             <h2
               className={`
-                text-xl font-bold text-primary mb-6 transition-opacity duration-300
+                text-xl font-bold text-white text-center mb-6 transition-opacity duration-300
                 ${collapsed ? "opacity-0 pointer-events-none" : "opacity-100"}
               `}
-            >
-              پنل مدیریت اکنون
-            </h2>
+              ref={nameRef}
+            ></h2>
 
             <nav className="space-y-3">
               {menu.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-sidebar-accent/20 text-sidebar-foreground"
+                  className={`flex items-center gap-3 p-3 rounded-lg ring-1 ring-transparent hover:bg-primary/20 hover:text-primary hover:ring-primary/40 transition-colors ${
+                    pathname.startsWith(item.href)
+                      ? "bg-primary/25 text-primary ring-primary/40"
+                      : "text-sidebar-foreground"
+                  }`}
                 >
                   {item.icon}
                   {!collapsed && <span>{item.title}</span>}
