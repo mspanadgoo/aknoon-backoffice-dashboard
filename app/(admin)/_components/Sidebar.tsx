@@ -61,9 +61,9 @@ export function Sidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 p-3 rounded-lg ring-1 ring-transparent hover:bg-primary/20 hover:text-primary hover:ring-primary/40 transition-colors ${
+                  className={`flex items-center gap-3 p-3 rounded-lg ring-1 ring-transparent hover:bg-primary/20 hover:text-primary-foreground/30 hover:ring-primary/40 transition-colors ${
                     pathname.startsWith(item.href)
-                      ? "bg-primary/25 text-primary ring-primary/40"
+                      ? "bg-primary/50 text-primary-foreground/70 ring-primary/40"
                       : "text-sidebar-foreground"
                   }`}
                 >

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { Pencil, Trash2, Plus, Package } from "lucide-react";
+import { Pencil, Trash2, Plus, FolderTree } from "lucide-react";
 import {
   useCategories,
   useDeleteCategory,
@@ -95,7 +95,7 @@ export default function CategoriesPage() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-primary flex items-center gap-2">
-                <Package />
+                <FolderTree />
                 دسته‌بندی‌ها
               </h2>
               <Button asChild title="افزودن دسته‌بندی">

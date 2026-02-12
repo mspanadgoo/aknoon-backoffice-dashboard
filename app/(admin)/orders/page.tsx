@@ -9,8 +9,7 @@ import { useState } from "react";
 
 const fa = new Intl.NumberFormat("fa-IR");
 
-const currency = (n: number) =>
-  new Intl.NumberFormat("fa-IR").format(n)
+const currency = (n: number) => new Intl.NumberFormat("fa-IR").format(n);
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   PENDING_PAYMENT: "در انتظار پرداخت",
@@ -40,6 +39,17 @@ const columns = [
     header: "تاریخ",
     accessor: (o: Order) =>
       o.createdAt ? new Date(o.createdAt).toLocaleDateString("fa-IR") : "-",
+  },
+  {
+    header: "زمان",
+    accessor: (o: Order) =>
+      o.createdAt
+        ? new Date(o.createdAt).toLocaleTimeString("fa-IR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+          })
+        : "-",
   },
 ];
 
