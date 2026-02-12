@@ -34,7 +34,6 @@ export function LoginForm() {
             localStorage.setItem("user_name", name);
           }
         } catch {}
-        toast.success("ورود موفق");
         router.replace("/dashboard");
       },
       onError: () => {
