@@ -65,9 +65,7 @@ export default function DashboardPage() {
     (s.pendingConfirmation as number | undefined) ??
     0;
   const confirmed =
-    byStatus["CONFIRMED"] ??
-    (s.confirmed as number | undefined) ??
-    0;
+    byStatus["CONFIRMED"] ?? (s.confirmed as number | undefined) ?? 0;
   const totalRevenue = (s.totalRevenue as number | undefined) ?? 0;
   const revenueToday = (s.todayRevenue as number | undefined) ?? 0;
   const averageOrderValue = (s.averageOrderValue as number | undefined) ?? 0;
@@ -315,7 +313,7 @@ export default function DashboardPage() {
                         سفارش: {fa.format(u.orderCount)}
                       </span>
                       <span className="text-sm font-medium">
-                        {fa.format(u.totalSpent)} تومان
+                        {fa.format(u.totalSpent * 1000)} تومان
                       </span>
                     </div>
                   </div>
@@ -323,7 +321,7 @@ export default function DashboardPage() {
                     <div
                       className="h-2 bg-primary"
                       style={{ width: `${spentWidth}%` }}
-                      aria-label={`مجموع ${fa.format(u.totalSpent)} تومان`}
+                      aria-label={`مجموع ${fa.format(u.totalSpent * 1000)} تومان`}
                     />
                   </div>
                 </div>
