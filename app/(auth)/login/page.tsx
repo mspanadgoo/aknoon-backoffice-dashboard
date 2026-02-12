@@ -15,7 +15,7 @@ export default function LoginPage() {
             <CardHeader className="text-center space-y-2">
               <div className="flex justify-center">
                 <Image
-                  src="/favicon.svg"
+                  src="/logo.svg"
                   alt="اکنون"
                   width={40}
                   height={40}
