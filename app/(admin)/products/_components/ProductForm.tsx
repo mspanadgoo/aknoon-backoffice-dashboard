@@ -1,5 +1,12 @@
 "use client";
-import { useForm, type UseFormRegisterReturn } from "react-hook-form";
+import {
+  useForm,
+  Controller,
+  useWatch,
+  type UseFormRegisterReturn,
+} from "react-hook-form";
+import { NumericFormat } from "react-number-format";
+import { numberToWords } from "@persian-tools/persian-tools";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -24,6 +31,7 @@ export function ProductForm({
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<CreateProductInput>({
     defaultValues: {
       name: initialValues?.name ?? "",
@@ -32,6 +40,8 @@ export function ProductForm({
       active: initialValues?.active ?? true,
     },
   });
+
+  const priceValue = useWatch({ control, name: "price" });
 
   useEffect(() => {
     if (initialValues) {
@@ -60,19 +70,38 @@ export function ProductForm({
 
       <div className="space-y-2">
         <Label htmlFor="price">قیمت (تومان)</Label>
-        <Input
-          id="price"
-          type="number"
-          step="1"
-          {...register("price", {
+        <Controller
+          name="price"
+          control={control}
+          rules={{
             required: "قیمت الزامی است",
-            valueAsNumber: true,
             min: { value: 0, message: "قیمت نباید منفی باشد" },
-          })}
-          placeholder="قیمت"
+          }}
+          render={({ field }) => (
+            <NumericFormat
+              id="price"
+              thousandSeparator=","
+              allowNegative={false}
+              onValueChange={(values) => {
+                field.onChange(values.floatValue);
+              }}
+              value={field.value}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="قیمت"
+            />
+          )}
         />
         {errors.price && (
           <p className="text-sm text-red-500">{errors.price.message}</p>
+        )}
+        {priceValue > 0 && typeof priceValue === "number" && (
+          <p className="text-sm text-muted-foreground">
+            {(() => {
+              const words = numberToWords(priceValue);
+              return words instanceof TypeError ? "" : words;
+            })()}{" "}
+            تومان
+          </p>
         )}
       </div>
 
