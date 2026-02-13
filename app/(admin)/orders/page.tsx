@@ -38,7 +38,7 @@ const columns = [
   },
   {
     header: "مجموع (تومان)",
-    accessor: (o: Order) => currency(o.totalPrice * 1000),
+    accessor: (o: Order) => currency(o.totalPrice),
   },
   {
     header: "وضعیت",
@@ -268,7 +268,7 @@ export default function OrdersPage() {
                     <div>کاربر: {selected.telegramUsername}</div>
                     <div>شناسه تلگرام: {selected.telegramUserId}</div>
                     <div>
-                      جمع کل: {currency(selected.totalPrice * 1000) + " تومان"}
+                      جمع کل: {currency(selected.totalPrice) + " تومان"}
                     </div>
                     <div>
                       وضعیت:{" "}
@@ -314,11 +314,11 @@ export default function OrdersPage() {
                             <div className="font-medium">{it.name}</div>
                             <div className="text-muted-foreground">
                               مقدار: {it.quantity} × قیمت:{" "}
-                              {currency(it.price * 1000) + " تومان"}
+                              {currency(it.price) + " تومان"}
                             </div>
                           </div>
                           <div className="text-primary font-medium">
-                            {currency(it.price * it.quantity * 1000) + " تومان"}
+                            {currency(it.price * it.quantity) + " تومان"}
                           </div>
                         </div>
                       ))

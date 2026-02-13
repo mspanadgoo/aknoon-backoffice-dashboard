@@ -5,6 +5,7 @@ import {
   useContext,
   useMemo,
   useState,
+  useEffect,
 } from "react";
 import { CheckCircle2, AlertTriangle, XCircle, Info } from "lucide-react";
 
@@ -58,6 +59,28 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     }),
     [show],
   );
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const ce = e as CustomEvent<{
+        type: ToastType;
+        message: string;
+        title?: string;
+        duration?: number;
+      }>;
+      const d = ce.detail;
+      if (!d) return;
+      show({
+        type: d.type,
+        message: d.message,
+        title: d.title,
+        duration: d.duration,
+      });
+    };
+    window.addEventListener("app:toast", handler as EventListener);
+    return () =>
+      window.removeEventListener("app:toast", handler as EventListener);
+  }, [show]);
 
   return (
     <ToastContext.Provider value={api}>

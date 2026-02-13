@@ -172,11 +172,10 @@ export default function DashboardPage() {
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">کل درآمد</div>
           <div className="text-3xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(totalRevenue * 1000)} تومان`}
+            {isLoading ? "..." : `${fa.format(totalRevenue)} تومان`}
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
-            امروز:{" "}
-            {isLoading ? "..." : `${fa.format(revenueToday * 1000)} تومان`}
+            امروز: {isLoading ? "..." : `${fa.format(revenueToday)} تومان`}
           </div>
         </div>
       </div>
@@ -187,31 +186,29 @@ export default function DashboardPage() {
             میانگین مبلغ هر سفارش
           </div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(averageOrderValue * 1000)} تومان`}
+            {isLoading ? "..." : `${fa.format(averageOrderValue)} تومان`}
           </div>
         </div>
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">هفته گذشته</div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(lastWeekRevenue * 1000)} تومان`}
+            {isLoading ? "..." : `${fa.format(lastWeekRevenue)} تومان`}
           </div>
         </div>
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">ماه گذشته</div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading ? "..." : `${fa.format(lastMonthRevenue * 1000)} تومان`}
+            {isLoading ? "..." : `${fa.format(lastMonthRevenue)} تومان`}
           </div>
         </div>
         <div className="bg-card text-card-foreground p-5 rounded-xl border shadow-sm">
           <div className="text-sm text-muted-foreground">سه‌ماه اخیر</div>
           <div className="text-2xl font-bold mt-2">
-            {isLoading
-              ? "..."
-              : `${fa.format(last3MonthsRevenue * 1000)} تومان`}
+            {isLoading ? "..." : `${fa.format(last3MonthsRevenue)} تومان`}
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
             سال گذشته:{" "}
-            {isLoading ? "..." : `${fa.format(lastYearRevenue * 1000)} تومان`}
+            {isLoading ? "..." : `${fa.format(lastYearRevenue)} تومان`}
           </div>
         </div>
       </div>
@@ -313,7 +310,7 @@ export default function DashboardPage() {
                         سفارش: {fa.format(u.orderCount)}
                       </span>
                       <span className="text-sm font-medium">
-                        {fa.format(u.totalSpent * 1000)} تومان
+                        {fa.format(u.totalSpent)} تومان
                       </span>
                     </div>
                   </div>
@@ -321,7 +318,7 @@ export default function DashboardPage() {
                     <div
                       className="h-2 bg-primary"
                       style={{ width: `${spentWidth}%` }}
-                      aria-label={`مجموع ${fa.format(u.totalSpent * 1000)} تومان`}
+                      aria-label={`مجموع ${fa.format(u.totalSpent)} تومان`}
                     />
                   </div>
                 </div>
