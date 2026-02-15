@@ -52,9 +52,9 @@ function RowActions(row: BankAccount) {
 }
 
 export default function BankAccountsPage() {
-  const [filters, setFilters] = useState<ListBankAccountsParams>({});
-  const [showFilters, setShowFilters] = useState(false);
-  const { data, isLoading } = useBankAccounts(filters);
+  // const [filters, setFilters] = useState<ListBankAccountsParams>({});
+  // const [showFilters, setShowFilters] = useState(false);
+  const { data, isLoading } = useBankAccounts();
   const rows = useMemo(() => data?.result ?? [], [data?.result]);
 
   const activeAccount = useMemo(() => rows.find((a) => a.active), [rows]);
@@ -142,6 +142,7 @@ export default function BankAccountsPage() {
                 </Link>
               </Button>
             </div>
+            {/* Filters for حساب‌های بانکی (currently disabled by request)
             <div className="rounded-lg border p-3">
               <div className="flex items-center justify-between md:hidden">
                 <button
@@ -203,6 +204,7 @@ export default function BankAccountsPage() {
                 </div>
               </div>
             </div>
+            */}
           </div>
         }
       />
