@@ -8,6 +8,7 @@ const labels: Record<string, string> = {
   admins: "ادمین‌ها",
   categories: "دسته‌بندی‌ها",
   products: "محصولات",
+  "bank-accounts": "حساب‌های بانکی",
   orders: "سفارش‌ها",
   baskets: "سبدها",
   new: "افزودن",

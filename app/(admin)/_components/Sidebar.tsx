@@ -12,6 +12,7 @@ import {
   LogOut,
   Users,
   ShoppingBag,
+  CreditCard,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import pkg from "../../../package.json";
@@ -32,6 +33,11 @@ export function Sidebar() {
     },
     { title: "محصولات", href: "/products", icon: <Package size={20} /> },
     { title: "سفارش‌ها", href: "/orders", icon: <ShoppingBag size={20} /> },
+    {
+      title: "حساب‌های بانکی",
+      href: "/bank-accounts",
+      icon: <CreditCard size={20} />,
+    },
   ];
 
   return (
@@ -61,6 +67,7 @@ export function Sidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={() => setOpen(false)}
                   className={`flex items-center gap-3 p-3 rounded-lg ring-1 ring-transparent hover:bg-primary/20 hover:text-primary-foreground/30 hover:ring-primary/40 transition-colors ${
                     pathname.startsWith(item.href)
                       ? "bg-primary/50 text-primary-foreground/70 ring-primary/40"
