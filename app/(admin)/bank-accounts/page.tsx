@@ -9,7 +9,6 @@ import {
 } from "@/api/bank-account/bank-account.hooks";
 import {
   BankAccount,
-  ListBankAccountsParams,
 } from "@/api/bank-account/bank-account.types";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
