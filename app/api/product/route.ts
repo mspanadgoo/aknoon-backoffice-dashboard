@@ -26,7 +26,7 @@ export async function GET(req: Request) {
   const sortCreatedAt = url.searchParams.get("sortCreatedAt") ?? "";
   const sortUpdatedAt = url.searchParams.get("sortUpdatedAt") ?? "";
   const page = url.searchParams.get("page") ?? "1";
-  const pageSize = url.searchParams.get("pageSize") ?? "10";
+  const pageSize = url.searchParams.get("pageSize") ?? "1000";
 
   const qs = new URLSearchParams();
   if (name) qs.set("name", name);
@@ -38,8 +38,8 @@ export async function GET(req: Request) {
   if (sortPrice) qs.set("sortPrice", sortPrice);
   if (sortCreatedAt) qs.set("sortCreatedAt", sortCreatedAt);
   if (sortUpdatedAt) qs.set("sortUpdatedAt", sortUpdatedAt);
-  if (page) qs.set("page", page);
-  if (pageSize) qs.set("pageSize", pageSize);
+  qs.set("page", page);
+  qs.set("pageSize", pageSize);
 
   let res: Response;
   try {

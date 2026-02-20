@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 export async function GET(req: Request) {
-  const base =
-    process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
   if (!base) {
     return NextResponse.json(
       { error: "API base URL not configured" },
@@ -27,7 +26,7 @@ export async function GET(req: Request) {
   const sortCreatedAt = url.searchParams.get("sortCreatedAt") ?? "";
   const sortStatus = url.searchParams.get("sortStatus") ?? "";
   const page = url.searchParams.get("page") ?? "1";
-  const pageSize = url.searchParams.get("pageSize") ?? "10";
+  const pageSize = url.searchParams.get("pageSize") ?? "1000";
 
   const qs = new URLSearchParams();
   if (telegramUsername) qs.set("telegramUsername", telegramUsername);
@@ -39,8 +38,8 @@ export async function GET(req: Request) {
   if (sortTotalPrice) qs.set("sortTotalPrice", sortTotalPrice);
   if (sortCreatedAt) qs.set("sortCreatedAt", sortCreatedAt);
   if (sortStatus) qs.set("sortStatus", sortStatus);
-  if (page) qs.set("page", page);
-  if (pageSize) qs.set("pageSize", pageSize);
+  qs.set("page", page);
+  qs.set("pageSize", pageSize);
 
   let res: Response;
   try {
@@ -55,17 +54,15 @@ export async function GET(req: Request) {
   }
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    return NextResponse.json(
-      data ?? { error: "Failed to fetch orders" },
-      { status: res.status },
-    );
+    return NextResponse.json(data ?? { error: "Failed to fetch orders" }, {
+      status: res.status,
+    });
   }
   return NextResponse.json(data);
 }
 
 export async function POST(req: Request) {
-  const base =
-    process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL;
   if (!base) {
     return NextResponse.json(
       { error: "API base URL not configured" },
@@ -100,10 +97,9 @@ export async function POST(req: Request) {
   }
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    return NextResponse.json(
-      data ?? { error: "Failed to create order" },
-      { status: res.status },
-    );
+    return NextResponse.json(data ?? { error: "Failed to create order" }, {
+      status: res.status,
+    });
   }
   return NextResponse.json(data);
 }

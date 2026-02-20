@@ -12,14 +12,18 @@
    if (!token) {
      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
    }
-   const url = new URL(req.url);
-   const name = url.searchParams.get("name") ?? "";
-   const page = url.searchParams.get("page") ?? "1";
-   const pageSize = url.searchParams.get("pageSize") ?? "10";
+ const url = new URL(req.url);
+ const name = url.searchParams.get("name") ?? "";
+ const page = url.searchParams.get("page") ?? "1";
+ const pageSize = url.searchParams.get("pageSize") ?? "1000";
  
    let res: Response;
    try {
-     res = await fetch(`${base}/api/v1/admin?name=${encodeURIComponent(name)}&page=${page}&pageSize=${pageSize}`, {
+    const qs = new URLSearchParams();
+    if (name) qs.set("name", name);
+    qs.set("page", page);
+    qs.set("pageSize", pageSize);
+    res = await fetch(`${base}/api/v1/admin?${qs.toString()}`, {
        headers: { Authorization: `Bearer ${token}` },
      });
    } catch (e) {

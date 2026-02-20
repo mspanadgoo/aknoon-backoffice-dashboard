@@ -70,14 +70,8 @@ const columns = [
 
 export default function OrdersPage() {
   const [filters, setFilters] = useState<ListOrdersParams>({});
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
-  const { data, isLoading } = useOrders({
-    ...filters,
-    page: pagination.pageIndex + 1,
-    pageSize: pagination.pageSize,
-  });
+  const { data, isLoading } = useOrders(filters);
   const rows: Order[] = data?.result ?? [];
-  const total = data?.count ?? 0;
   const [selected, setSelected] = useState<Order | null>(null);
   const [open, setOpen] = useState(false);
   const [openReceipt, setOpenReceipt] = useState(false);
@@ -104,9 +98,6 @@ export default function OrdersPage() {
       <DataTable
         data={isLoading ? [] : rows}
         columns={columns}
-        pagination={pagination}
-        onPaginationChange={setPagination}
-        totalRows={total}
         caption={
           <div className="space-y-3">
             <h2 className="text-xl font-bold text-primary flex items-center gap-2">

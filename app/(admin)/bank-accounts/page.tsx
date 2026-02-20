@@ -53,12 +53,7 @@ function RowActions(row: BankAccount) {
 
 export default function BankAccountsPage() {
   const [filters] = useState<ListBankAccountsParams>({});
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
-  const { data, isLoading } = useBankAccounts({
-    ...filters,
-    page: pagination.pageIndex + 1,
-    pageSize: pagination.pageSize,
-  });
+  const { data, isLoading } = useBankAccounts(filters);
   const rows = useMemo(() => data?.result ?? [], [data?.result]);
   const total = data?.count ?? rows.length;
 
@@ -134,9 +129,6 @@ export default function BankAccountsPage() {
         data={isLoading ? [] : sortedRows}
         columns={columns}
         rowActions={(row) => <RowActions {...row} />}
-        pagination={pagination}
-        onPaginationChange={setPagination}
-        totalRows={total}
         caption={
           <div className="space-y-3">
             <div className="flex items-center justify-between">

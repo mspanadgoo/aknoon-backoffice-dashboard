@@ -22,7 +22,7 @@ export async function GET(req: Request) {
   const sortOwnerName = url.searchParams.get("sortOwnerName") ?? "";
   const sortCreatedAt = url.searchParams.get("sortCreatedAt") ?? "";
   const page = url.searchParams.get("page") ?? "1";
-  const pageSize = url.searchParams.get("pageSize") ?? "10";
+  const pageSize = url.searchParams.get("pageSize") ?? "1000";
 
   const qs = new URLSearchParams();
   if (ownerName) qs.set("ownerName", ownerName);
@@ -30,8 +30,8 @@ export async function GET(req: Request) {
   if (active) qs.set("active", active);
   if (sortOwnerName) qs.set("sortOwnerName", sortOwnerName);
   if (sortCreatedAt) qs.set("sortCreatedAt", sortCreatedAt);
-  if (page) qs.set("page", page);
-  if (pageSize) qs.set("pageSize", pageSize);
+  qs.set("page", page);
+  qs.set("pageSize", pageSize);
 
   let res: Response;
   try {

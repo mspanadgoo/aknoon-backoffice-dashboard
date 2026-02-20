@@ -20,15 +20,15 @@ export async function GET(req: Request) {
   const sortName = url.searchParams.get("sortName") ?? "";
   const sortCreatedAt = url.searchParams.get("sortCreatedAt") ?? "";
   const page = url.searchParams.get("page") ?? "1";
-  const pageSize = url.searchParams.get("pageSize") ?? "10";
+  const pageSize = url.searchParams.get("pageSize") ?? "1000";
 
   const qs = new URLSearchParams();
   if (name) qs.set("name", name);
   if (active) qs.set("active", active);
   if (sortName) qs.set("sortName", sortName);
   if (sortCreatedAt) qs.set("sortCreatedAt", sortCreatedAt);
-  if (page) qs.set("page", page);
-  if (pageSize) qs.set("pageSize", pageSize);
+  qs.set("page", page);
+  qs.set("pageSize", pageSize);
 
   const res = await fetch(`${base}/api/v1/category?${qs.toString()}`, {
     headers: { Authorization: `Bearer ${token}` },

@@ -303,64 +303,39 @@ export function DataTable<TData>({
             : "0"}
         </div>
 
-        <div className="flex items-center gap-2">
-          {totalRows > 0 && (
-            <span className="text-xs text-muted-foreground">
-              {fa.format(effectivePagination.pageIndex + 1)} /{" "}
-              {fa.format(
-                Math.max(
-                  1,
-                  Math.ceil(
-                    totalRows / Math.max(effectivePagination.pageSize, 1),
-                  ),
-                ),
-              )}
-            </span>
-          )}
-          <button
-            className="px-3 py-1.5 rounded-md bg-secondary text-secondary-foreground disabled:opacity-50"
-            onClick={() =>
-              handlePaginationChange({
-                ...effectivePagination,
-                pageIndex: Math.max(0, effectivePagination.pageIndex - 1),
-              })
-            }
-            disabled={effectivePagination.pageIndex === 0}
-          >
-            قبلی
-          </button>
-          <button
-            className="px-3 py-1.5 rounded-md bg-secondary text-secondary-foreground disabled:opacity-50"
-            onClick={() => {
-              const totalPages = Math.max(
-                1,
-                Math.ceil(
-                  totalRows / Math.max(effectivePagination.pageSize, 1),
-                ),
-              );
-              const nextPageIndex = Math.min(
-                effectivePagination.pageIndex + 1,
-                totalPages - 1,
-              );
-              handlePaginationChange({
-                ...effectivePagination,
-                pageIndex: nextPageIndex,
-              });
-            }}
-            disabled={
-              totalRows === 0 ||
-              effectivePagination.pageIndex >=
-                Math.max(
-                  1,
-                  Math.ceil(
-                    totalRows / Math.max(effectivePagination.pageSize, 1),
-                  ),
-                ) -
-                  1
-            }
-          >
-            بعدی
-          </button>
+        <div className="flex items-center gap-1">
+          {(() => {
+            const totalPages =
+              totalRows > 0
+                ? Math.max(
+                    1,
+                    Math.ceil(
+                      totalRows / Math.max(effectivePagination.pageSize, 1),
+                    ),
+                  )
+                : 1;
+            return Array.from({ length: totalPages }, (_, i) => i).map(
+              (pageIndex) => (
+                <button
+                  key={pageIndex}
+                  className={cn(
+                    "px-2.5 py-1.5 rounded-md border text-xs",
+                    pageIndex === effectivePagination.pageIndex
+                      ? "bg-secondary text-secondary-foreground border-secondary"
+                      : "bg-background text-foreground border-input",
+                  )}
+                  onClick={() =>
+                    handlePaginationChange({
+                      ...effectivePagination,
+                      pageIndex,
+                    })
+                  }
+                >
+                  {fa.format(pageIndex + 1)}
+                </button>
+              ),
+            );
+          })()}
         </div>
       </div>
     </div>
