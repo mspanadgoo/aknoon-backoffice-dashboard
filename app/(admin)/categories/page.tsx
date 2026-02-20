@@ -72,8 +72,14 @@ function RowActions({ row }: { row: Category }) {
 
 export default function CategoriesPage() {
   const [filters, setFilters] = useState<ListCategoriesParams>({});
-  const { data, isLoading } = useCategories(filters);
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const { data, isLoading } = useCategories({
+    ...filters,
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+  });
   const rows: Category[] = data?.result ?? [];
+  const total = data?.count ?? 0;
   const [showFilters, setShowFilters] = useState(false);
   return (
     <div className="space-y-4">
@@ -91,6 +97,9 @@ export default function CategoriesPage() {
         data={isLoading ? [] : rows}
         columns={columns}
         rowActions={(row) => <RowActions row={row} />}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        totalRows={total}
         caption={
           <div className="space-y-3">
             <div className="flex items-center justify-between">

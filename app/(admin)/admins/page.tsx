@@ -56,8 +56,14 @@ function RowActions({ row }: { row: Admin }) {
 
 export default function AdminsPage() {
   const [filters, setFilters] = useState<ListAdminsParams>({});
-  const { data, isLoading } = useAdmins(filters);
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const { data, isLoading } = useAdmins({
+    ...filters,
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+  });
   const rows: Admin[] = data?.result ?? [];
+  const total = data?.count ?? 0;
   const [showFilters, setShowFilters] = useState(false);
 
   return (
@@ -76,6 +82,9 @@ export default function AdminsPage() {
         data={isLoading ? [] : rows}
         columns={columns}
         rowActions={(row) => <RowActions row={row} />}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        totalRows={total}
         caption={
           <div className="space-y-3">
             <div className="flex items-center justify-between">

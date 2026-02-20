@@ -25,6 +25,7 @@ type DataTableProps<TData> = {
   caption?: React.ReactNode;
   renderExpanded?: (row: TData) => React.ReactNode;
   onRowClick?: (row: TData) => void;
+  totalRows?: number;
 };
 
 export function DataTable<TData>({
@@ -38,6 +39,7 @@ export function DataTable<TData>({
   caption,
   renderExpanded,
   onRowClick,
+  totalRows: totalRowsProp,
 }: DataTableProps<TData>) {
   const [internalPagination, setInternalPagination] =
     React.useState<PaginationState>({
@@ -46,6 +48,10 @@ export function DataTable<TData>({
     });
 
   const effectivePagination = pagination ?? internalPagination;
+
+  const hasServerTotal = typeof totalRowsProp === "number";
+  const totalRows = hasServerTotal ? (totalRowsProp as number) : data.length;
+  const mobileTotalRows = data.length;
 
   const handlePaginationChange = (next: PaginationState) => {
     if (onPaginationChange) {
@@ -68,14 +74,18 @@ export function DataTable<TData>({
     return [...endCols, ...columns, ...startCols];
   }, [columns, rowActions]);
 
-  const totalRows = data.length;
   const startIndex =
     effectivePagination.pageIndex * effectivePagination.pageSize;
-  const endIndex = Math.min(
-    startIndex + effectivePagination.pageSize,
-    totalRows,
-  );
-  const pageRows = data.slice(startIndex, endIndex);
+  let endIndex = startIndex + effectivePagination.pageSize;
+  let pageRows: TData[];
+  if (hasServerTotal) {
+    pageRows = data;
+    endIndex = Math.min(startIndex + data.length, totalRows);
+  } else {
+    const localTotal = data.length;
+    endIndex = Math.min(startIndex + effectivePagination.pageSize, localTotal);
+    pageRows = data.slice(startIndex, endIndex);
+  }
   const start = totalRows > 0 ? startIndex + 1 : 0;
   const end = totalRows > 0 ? endIndex : 0;
   const fa = new Intl.NumberFormat("fa-IR");
@@ -105,14 +115,14 @@ export function DataTable<TData>({
       if (entry.isIntersecting) {
         setMobileLoading(true);
         setMobileCount((prev) =>
-          Math.min(prev + (pageSizeOptions[0] ?? 10), totalRows),
+          Math.min(prev + (pageSizeOptions[0] ?? 10), mobileTotalRows),
         );
         setMobileLoading(false);
       }
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [totalRows, pageSizeOptions]);
+  }, [mobileTotalRows, pageSizeOptions]);
 
   const mobileRows = data.slice(0, mobileCount);
 
@@ -163,7 +173,7 @@ export function DataTable<TData>({
             داده‌ای یافت نشد
           </div>
         )}
-        {mobileRows.length < totalRows && (
+        {mobileRows.length < mobileTotalRows && (
           <div
             ref={mobileSentinelRef}
             className="h-8 flex items-center justify-center text-xs text-muted-foreground"
@@ -294,6 +304,19 @@ export function DataTable<TData>({
         </div>
 
         <div className="flex items-center gap-2">
+          {totalRows > 0 && (
+            <span className="text-xs text-muted-foreground">
+              {fa.format(effectivePagination.pageIndex + 1)} /{" "}
+              {fa.format(
+                Math.max(
+                  1,
+                  Math.ceil(
+                    totalRows / Math.max(effectivePagination.pageSize, 1),
+                  ),
+                ),
+              )}
+            </span>
+          )}
           <button
             className="px-3 py-1.5 rounded-md bg-secondary text-secondary-foreground disabled:opacity-50"
             onClick={() =>
@@ -308,16 +331,33 @@ export function DataTable<TData>({
           </button>
           <button
             className="px-3 py-1.5 rounded-md bg-secondary text-secondary-foreground disabled:opacity-50"
-            onClick={() =>
+            onClick={() => {
+              const totalPages = Math.max(
+                1,
+                Math.ceil(
+                  totalRows / Math.max(effectivePagination.pageSize, 1),
+                ),
+              );
+              const nextPageIndex = Math.min(
+                effectivePagination.pageIndex + 1,
+                totalPages - 1,
+              );
               handlePaginationChange({
                 ...effectivePagination,
-                pageIndex:
-                  endIndex >= totalRows
-                    ? effectivePagination.pageIndex
-                    : effectivePagination.pageIndex + 1,
-              })
+                pageIndex: nextPageIndex,
+              });
+            }}
+            disabled={
+              totalRows === 0 ||
+              effectivePagination.pageIndex >=
+                Math.max(
+                  1,
+                  Math.ceil(
+                    totalRows / Math.max(effectivePagination.pageSize, 1),
+                  ),
+                ) -
+                  1
             }
-            disabled={endIndex >= totalRows}
           >
             بعدی
           </button>

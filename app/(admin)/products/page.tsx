@@ -49,8 +49,14 @@ function RowActions(row: Product) {
 
 export default function ProductsPage() {
   const [filters, setFilters] = useState<ListProductsParams>({});
-  const { data, isLoading } = useProducts(filters);
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const { data, isLoading } = useProducts({
+    ...filters,
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+  });
   const rows: Product[] = data?.result ?? [];
+  const total = data?.count ?? 0;
   const { data: catData } = useCategories({ pageSize: 1000 });
   const categories = catData?.result ?? [];
   const nameById = new Map(categories.map((c) => [c.id, c.name]));
@@ -102,6 +108,9 @@ export default function ProductsPage() {
         data={isLoading ? [] : rows}
         columns={columns}
         rowActions={(row) => <RowActions {...row} />}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        totalRows={total}
         caption={
           <div className="space-y-3">
             <div className="flex items-center justify-between">

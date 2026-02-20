@@ -3,7 +3,7 @@ import { DataTable } from "@/components/ui/data-table";
 import Image from "next/image";
 import { ShoppingBag, Eye } from "lucide-react";
 import { useOrders, useUpdateOrderStatus } from "@/api/order/order.hooks";
-import { Order, OrderStatus } from "@/api/order/order.types";
+import { Order, OrderStatus, ListOrdersParams } from "@/api/order/order.types";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -69,16 +69,15 @@ const columns = [
 ];
 
 export default function OrdersPage() {
-  const [filters, setFilters] = useState<{
-    telegramUsername?: string;
-    telegramUserId?: number;
-    minTotalPrice?: number;
-    maxTotalPrice?: number;
-    status?: OrderStatus;
-    productName?: string;
-  }>({});
-  const { data, isLoading } = useOrders(filters);
+  const [filters, setFilters] = useState<ListOrdersParams>({});
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const { data, isLoading } = useOrders({
+    ...filters,
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+  });
   const rows: Order[] = data?.result ?? [];
+  const total = data?.count ?? 0;
   const [selected, setSelected] = useState<Order | null>(null);
   const [open, setOpen] = useState(false);
   const [openReceipt, setOpenReceipt] = useState(false);
@@ -105,6 +104,9 @@ export default function OrdersPage() {
       <DataTable
         data={isLoading ? [] : rows}
         columns={columns}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        totalRows={total}
         caption={
           <div className="space-y-3">
             <h2 className="text-xl font-bold text-primary flex items-center gap-2">
