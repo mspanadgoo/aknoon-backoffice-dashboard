@@ -7,6 +7,8 @@ export type OrderItem = {
 
 export type OrderStatus =
   | "PENDING_PAYMENT"
+  | "COLLECTING_ZIP"
+  | "COLLECTING_ADDRESS"
   | "PENDING_CONFIRMATION"
   | "CONFIRMED"
   | "DELIVERED";
@@ -17,6 +19,8 @@ export type Order = {
   telegramUsername: string;
   items: OrderItem[];
   totalPrice: number;
+  zipCode: string;
+  address: string;
   paymentImageUrl?: string;
   status: OrderStatus;
   createdAt?: string | null;
@@ -28,6 +32,8 @@ export type CreateOrderInput = {
   telegramUsername: string;
   items: OrderItem[];
   totalPrice: number;
+  zipCode: string;
+  address: string;
   paymentImageUrl?: string;
 };
 
@@ -44,6 +50,8 @@ export type ListOrdersParams = {
   maxTotalPrice?: number;
   status?: OrderStatus;
   productName?: string;
+  zipCode?: string;
+  address?: string;
   sortTotalPrice?: 1 | -1;
   sortCreatedAt?: 1 | -1;
   sortStatus?: 1 | -1;

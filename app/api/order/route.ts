@@ -22,6 +22,8 @@ export async function GET(req: Request) {
   const maxTotalPrice = url.searchParams.get("maxTotalPrice") ?? "";
   const status = url.searchParams.get("status") ?? "";
   const productName = url.searchParams.get("productName") ?? "";
+  const zipCode = url.searchParams.get("zipCode") ?? "";
+  const address = url.searchParams.get("address") ?? "";
   const sortTotalPrice = url.searchParams.get("sortTotalPrice") ?? "";
   const sortCreatedAt = url.searchParams.get("sortCreatedAt") ?? "";
   const sortStatus = url.searchParams.get("sortStatus") ?? "";
@@ -35,6 +37,8 @@ export async function GET(req: Request) {
   if (maxTotalPrice) qs.set("maxTotalPrice", maxTotalPrice);
   if (status) qs.set("status", status);
   if (productName) qs.set("productName", productName);
+  if (zipCode) qs.set("zipCode", zipCode);
+  if (address) qs.set("address", address);
   if (sortTotalPrice) qs.set("sortTotalPrice", sortTotalPrice);
   if (sortCreatedAt) qs.set("sortCreatedAt", sortCreatedAt);
   if (sortStatus) qs.set("sortStatus", sortStatus);

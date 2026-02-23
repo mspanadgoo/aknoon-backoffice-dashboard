@@ -1,7 +1,7 @@
 "use client";
 import { DataTable } from "@/components/ui/data-table";
 import Image from "next/image";
-import { ShoppingBag, Eye } from "lucide-react";
+import { ShoppingBag, Eye, Copy } from "lucide-react";
 import { useOrders, useUpdateOrderStatus } from "@/api/order/order.hooks";
 import { Order, OrderStatus, ListOrdersParams } from "@/api/order/order.types";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ const currency = (n: number) => new Intl.NumberFormat("fa-IR").format(n);
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   PENDING_PAYMENT: "در انتظار پرداخت",
+  COLLECTING_ZIP: "در حال دریافت کد پستی",
+  COLLECTING_ADDRESS: "در حال دریافت آدرس",
   PENDING_CONFIRMATION: "در انتظار تایید",
   CONFIRMED: "تایید شده",
   DELIVERED: "تحویل شده",
@@ -20,6 +22,10 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
 const STATUS_STYLES: Record<OrderStatus, string> = {
   PENDING_PAYMENT:
     "bg-yellow-100 text-yellow-900 border border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-100 dark:border-yellow-800",
+  COLLECTING_ZIP:
+    "bg-amber-100 text-amber-900 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-100 dark:border-amber-800",
+  COLLECTING_ADDRESS:
+    "bg-orange-100 text-orange-900 border border-orange-200 dark:bg-orange-900/30 dark:text-orange-100 dark:border-orange-800",
   PENDING_CONFIRMATION:
     "bg-indigo-100 text-indigo-900 border border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-100 dark:border-indigo-800",
   CONFIRMED:
@@ -28,9 +34,27 @@ const STATUS_STYLES: Record<OrderStatus, string> = {
     "bg-sky-100 text-sky-900 border border-sky-200 dark:bg-sky-900/30 dark:text-sky-100 dark:border-sky-800",
 };
 
+const FILTER_STATUSES: OrderStatus[] = [
+  "PENDING_PAYMENT",
+  "COLLECTING_ZIP",
+  "COLLECTING_ADDRESS",
+  "PENDING_CONFIRMATION",
+  "CONFIRMED",
+  "DELIVERED",
+];
+
+const CHANGEABLE_STATUSES: OrderStatus[] = [
+  "PENDING_PAYMENT",
+  "PENDING_CONFIRMATION",
+  "CONFIRMED",
+  "DELIVERED",
+];
+
 const columns = [
   { header: "کاربر تلگرام", accessor: (o: Order) => o.telegramUsername },
   { header: "شناسه تلگرام", accessor: (o: Order) => o.telegramUserId },
+  { header: "کد پستی", accessor: (o: Order) => o.zipCode || "-" },
+  { header: "آدرس", accessor: (o: Order) => o.address || "-" },
   {
     header: "آیتم‌ها",
     accessor: (o: Order) =>
@@ -76,12 +100,6 @@ export default function OrdersPage() {
   const [open, setOpen] = useState(false);
   const [openReceipt, setOpenReceipt] = useState(false);
   const { mutate, isPending } = useUpdateOrderStatus(selected?.id ?? "");
-  const statuses: OrderStatus[] = [
-    "PENDING_PAYMENT",
-    "PENDING_CONFIRMATION",
-    "CONFIRMED",
-    "DELIVERED",
-  ];
 
   return (
     <div className="space-y-4">
@@ -185,12 +203,34 @@ export default function OrdersPage() {
                   }}
                 >
                   <option value="">وضعیت (همه)</option>
-                  {statuses.map((s) => (
+                  {FILTER_STATUSES.map((s) => (
                     <option key={s} value={s}>
                       {STATUS_LABELS[s]}
                     </option>
                   ))}
                 </select>
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="کد پستی"
+                  value={filters.zipCode ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      zipCode: e.target.value || undefined,
+                    }))
+                  }
+                />
+                <input
+                  className="rounded-md border px-3 py-2 text-sm bg-background"
+                  placeholder="آدرس"
+                  value={filters.address ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      address: e.target.value || undefined,
+                    }))
+                  }
+                />
                 <div className="md:col-span-3 lg:col-span-5 flex items-center gap-2 justify-end">
                   <Button
                     variant="outline"
@@ -238,7 +278,7 @@ export default function OrdersPage() {
               </div>
               <div className="p-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="space-y-1 text-sm">
+                  <div className="space-y-2 text-sm">
                     <div>
                       زمان سفارش:{" "}
                       {selected.createdAt
@@ -260,6 +300,44 @@ export default function OrdersPage() {
                     </div>
                     <div>کاربر: {selected.telegramUsername}</div>
                     <div>شناسه تلگرام: {selected.telegramUserId}</div>
+                    <div className="flex items-center gap-2">
+                      <span>کد پستی: {selected.zipCode || "-"}</span>
+                      {selected.zipCode && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={() =>
+                            navigator.clipboard.writeText(
+                              selected.zipCode || "",
+                            )
+                          }
+                          title="کپی کد پستی"
+                        >
+                          <Copy size={14} />
+                        </Button>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="truncate">
+                        آدرس: {selected.address || "-"}
+                      </span>
+                      {selected.address && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={() =>
+                            navigator.clipboard.writeText(
+                              selected.address || "",
+                            )
+                          }
+                          title="کپی آدرس"
+                        >
+                          <Copy size={14} />
+                        </Button>
+                      )}
+                    </div>
                     <div>
                       جمع کل: {currency(selected.totalPrice) + " تومان"}
                     </div>
@@ -328,7 +406,7 @@ export default function OrdersPage() {
                     تغییر وضعیت
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
-                    {statuses.map((s) => (
+                    {CHANGEABLE_STATUSES.map((s) => (
                       <Button
                         key={s}
                         variant={
