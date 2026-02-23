@@ -13,8 +13,8 @@ const currency = (n: number) => new Intl.NumberFormat("fa-IR").format(n);
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   PENDING_PAYMENT: "در انتظار پرداخت",
-  COLLECTING_ZIP: "در حال دریافت کد پستی",
-  COLLECTING_ADDRESS: "در حال دریافت آدرس",
+  COLLECTING_ZIP: "در حال دریافت اطلاعات",
+  COLLECTING_ADDRESS: "در حال دریافت اطلاعات",
   PENDING_CONFIRMATION: "در انتظار تایید",
   CONFIRMED: "تایید شده",
   DELIVERED: "تحویل شده",
