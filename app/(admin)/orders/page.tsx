@@ -277,84 +277,131 @@ export default function OrdersPage() {
                 </Button>
               </div>
               <div className="p-4 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      زمان سفارش:{" "}
-                      {selected.createdAt
-                        ? new Date(selected.createdAt).toLocaleTimeString(
-                            "fa-IR",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hourCycle: "h23",
-                            },
-                          )
-                        : "-"}
-                      {" - "}
-                      {selected.createdAt
-                        ? new Date(selected.createdAt).toLocaleDateString(
-                            "fa-IR",
-                          )
-                        : "-"}
-                    </div>
-                    <div>کاربر: {selected.telegramUsername}</div>
-                    <div>شناسه تلگرام: {selected.telegramUserId}</div>
-                    <div className="flex items-center gap-2">
-                      <span>کد پستی: {selected.zipCode || "-"}</span>
-                      {selected.zipCode && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={() =>
-                            navigator.clipboard.writeText(
-                              selected.zipCode || "",
-                            )
-                          }
-                          title="کپی کد پستی"
+                <div className="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)]">
+                  <div className="space-y-3 text-sm">
+                    <div className="rounded-lg border bg-muted/40 p-3 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">
+                          زمان سفارش
+                        </span>
+                        <span className="font-medium">
+                          {selected.createdAt
+                            ? new Date(selected.createdAt).toLocaleTimeString(
+                                "fa-IR",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hourCycle: "h23",
+                                },
+                              )
+                            : "-"}
+                          {" - "}
+                          {selected.createdAt
+                            ? new Date(selected.createdAt).toLocaleDateString(
+                                "fa-IR",
+                              )
+                            : "-"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">جمع کل</span>
+                        <span className="font-semibold">
+                          {currency(selected.totalPrice) + " تومان"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">وضعیت</span>
+                        <span
+                          className={`px-2 py-1 text-xs rounded ${
+                            STATUS_STYLES[selected.status]
+                          }`}
                         >
-                          <Copy size={14} />
-                        </Button>
-                      )}
+                          {STATUS_LABELS[selected.status]}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="truncate">
-                        آدرس: {selected.address || "-"}
-                      </span>
-                      {selected.address && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={() =>
-                            navigator.clipboard.writeText(
-                              selected.address || "",
-                            )
-                          }
-                          title="کپی آدرس"
-                        >
-                          <Copy size={14} />
-                        </Button>
-                      )}
-                    </div>
-                    <div>
-                      جمع کل: {currency(selected.totalPrice) + " تومان"}
-                    </div>
-                    <div>
-                      وضعیت:{" "}
-                      <span
-                        className={`px-2 py-1 text-xs rounded ${
-                          STATUS_STYLES[selected.status]
-                        }`}
-                      >
-                        {STATUS_LABELS[selected.status]}
-                      </span>
+
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <div className="rounded-lg border bg-muted/20 p-3 space-y-1">
+                        <div className="text-xs text-muted-foreground mb-1">
+                          اطلاعات مشتری
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">کاربر</span>
+                          <span className="font-medium">
+                            {selected.telegramUsername}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">
+                            شناسه تلگرام
+                          </span>
+                          <span className="font-mono text-xs">
+                            {selected.telegramUserId}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="rounded-lg border bg-muted/20 p-3 space-y-2">
+                        <div className="text-xs text-muted-foreground mb-1">
+                          اطلاعات ارسال
+                        </div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-muted-foreground">کد پستی</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-xs">
+                              {selected.zipCode || "-"}
+                            </span>
+                            {selected.zipCode && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                onClick={() =>
+                                  navigator.clipboard.writeText(
+                                    selected.zipCode || "",
+                                  )
+                                }
+                                title="کپی کد پستی"
+                              >
+                                <Copy size={14} />
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-muted-foreground">آدرس</span>
+                          <div className="flex-1 flex items-center justify-between gap-2">
+                            <span className="text-xs md:text-sm break-words">
+                              {selected.address || "-"}
+                            </span>
+                            {selected.address && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                onClick={() =>
+                                  navigator.clipboard.writeText(
+                                    selected.address || "",
+                                  )
+                                }
+                                title="کپی آدرس"
+                              >
+                                <Copy size={14} />
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  {selected.paymentImageUrl ? (
-                    <div className="text-center space-y-2">
-                      <div>
+
+                  <div className="rounded-lg border bg-muted/10 p-3 flex items-center justify-center">
+                    {selected.paymentImageUrl ? (
+                      <div className="space-y-2 text-center">
+                        <div className="text-sm text-muted-foreground">
+                          رسید پرداخت ثبت شده است
+                        </div>
                         <Button
                           variant="outline"
                           size="sm"
@@ -363,12 +410,12 @@ export default function OrdersPage() {
                           مشاهده رسید
                         </Button>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="text-center text-sm text-muted-foreground">
-                      رسید پرداخت موجود نیست
-                    </div>
-                  )}
+                    ) : (
+                      <div className="text-center text-sm text-muted-foreground">
+                        رسید پرداخت موجود نیست
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="rounded-md border">
